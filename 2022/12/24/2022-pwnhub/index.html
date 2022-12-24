@@ -16,15 +16,15 @@
   <meta name="author" content="ma5hr00m">
   <meta name="keywords" content="">
   
-    <meta name="description" content="第一次跟着协会打ctf">
+    <meta name="description" content="第一次跟着协会打ctf,结果当头一棒">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2022 PwnHub WriteUp">
 <meta property="og:url" content="http://ma5hr00m.top/2022/12/24/2022-pwnhub/index.html">
 <meta property="og:site_name" content="ma5hr00m blog">
-<meta property="og:description" content="第一次跟着协会打ctf">
+<meta property="og:description" content="第一次跟着协会打ctf,结果当头一棒">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-12-24T08:41:07.000Z">
-<meta property="article:modified_time" content="2022-12-24T10:08:30.055Z">
+<meta property="article:modified_time" content="2022-12-24T14:20:07.018Z">
 <meta property="article:author" content="ma5hr00m">
 <meta property="article:tag" content="CTF">
 <meta name="twitter:card" content="summary_large_image">
@@ -218,7 +218,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          2.4k 字
         
       </span>
     
@@ -229,7 +229,7 @@
         
         
         
-          1 分钟
+          27 分钟
         
       </span>
     
@@ -280,7 +280,58 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="赛题复现"><a href="#赛题复现" class="headerlink" title="赛题复现"></a>赛题复现</h1><h2 id="Calc"><a href="#Calc" class="headerlink" title="Calc"></a>Calc</h2><p>黑盒审计,后端语言为python.</p>
+<p>检查后判断为命令注入型题目,<code>calc</code>的值传递到后端的eval()函数进行计算.</p>
+<p>尝试提交一些字符,发现存在两种报错形式,<code>error</code>和<code>500</code>,前者为<code>calc</code>参数中存在黑名单字符,后者为命令执行错误.</p>
+<p>利用&#96;urpSuite的intruder模块获取到了黑名单字符.</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs http">blacklist=&#x27;&#x27;&#x27;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ=_\t\n\\[]&#x27;&quot;@&#x27;&#x27;&#x27;<br></code></pre></td></tr></table></figure>
+
+<p>比赛的时候主要考虑的是位运算,但python相对php有着数据类型的限制,导致这条路走不通(?).</p>
+<blockquote>
+<p>搜到的无字母命令注入基本都是php的,包括🍆皇博客里记录的赛题.</p>
+</blockquote>
+<p>赛后根据官方wp得知是unicode欺骗,利用的是python支持Non-ASCII Identiﬁes,也就是说,在python程序中,在文件开头添加一段声明后,我们可以使用其他字符对所需要使用的英文字符进行替换,比如将<code>a</code>替换为拉丁字母<code>𝐚</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br></code></pre></td></tr></table></figure>
+
+<p>知道这个知识点后,就可以构造出适当的payload来读取根目录下的flag文件了.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;calc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;𝐨𝐩𝐞𝐧(𝐛𝐲𝐭𝐞𝐬((47,102,108,97,103)).𝐝𝐞𝐜𝐨𝐝𝐞()).𝐫𝐞𝐚𝐝()&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="归纳"><a href="#归纳" class="headerlink" title="归纳"></a>归纳</h1><h2 id="Non-ASCII-Identiﬁes"><a href="#Non-ASCII-Identiﬁes" class="headerlink" title="Non-ASCII Identiﬁes"></a>Non-ASCII Identiﬁes</h2><p><code>Non-ASCII Identifiers</code> 是指在编程语言中使用的标识符（即变量名、函数名等）中包含非<code>ASCII</code>字符的情况。<code>ASCII（American Standard Code for Information Interchange）</code>是一种用于表示英文字符的编码方式，它包含了大多数常用的英文字符，但并不能表示所有的非英文字符。因此，在编程语言中使用非<code>ASCII</code>字符作为标识符时，可能会受到一些限制。</p>
+<p>在<code>Python</code>中，可以使用非<code>ASCII</code>字符作为标识符，但是需要在源代码的第一行添加一个特殊的声明，告诉解释器使用的编码方式。例如，如果要使用非<code>ASCII</code>字符作为标识符，可以在源代码的第一行添加如下声明：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># -*- coding: utf-8 -*-</span><br></code></pre></td></tr></table></figure>
+
+<p>这样，就可以在代码中使用非<code>ASCII</code>字符作为标识符了。但是，需要注意的是，在使用非ASCII字符作为标识符时，应尽量避免使用与ASCII字符相似的字符，以免造成歧义。</p>
+<blockquote>
+<p>具体可见该链接 <a target="_blank" rel="noopener" href="https://peps.python.org/pep-3131/">https://peps.python.org/pep-3131/</a></p>
+</blockquote>
+<h2 id="Unicode欺骗"><a href="#Unicode欺骗" class="headerlink" title="Unicode欺骗"></a>Unicode欺骗</h2><p>Unicode spoofing是指通过使用Unicode字符创建看起来相似的域名或网站地址来欺骗用户的一种方式。这种方法可以利用Unicode中的特殊字符来创建与正常字符相似的字符，从而使人难以分辨出真正的域名或网站地址。</p>
+<p>例如，一个恶意网站可能会使用Unicode字符创建一个看起来像“example.com”的域名，但实际上是一个不同的域名。如果用户不能正确地识别这种差异，就可能会被骗到恶意网站。</p>
+<p>为了避免被Unicode欺骗，用户应该仔细检查网站地址，并使用可靠的安全工具（例如浏览器的安全插件）来帮助鉴别可疑的网站。</p>
+<h2 id="使用到的python函数"><a href="#使用到的python函数" class="headerlink" title="使用到的python函数"></a>使用到的python函数</h2><h3 id="bytes"><a href="#bytes" class="headerlink" title="bytes()"></a>bytes()</h3><p>python中的内置函数，它的作用是将一个可迭代的对象转换为一个二进制字节对象。</p>
+<p>使用方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-built_in">bytes</span>(iterable_object)<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>iterable_object</code>可以是一个字符串、列表、元组等可迭代的对象。例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用字符串作为参数</span><br>b = <span class="hljs-built_in">bytes</span>(<span class="hljs-string">&quot;hello&quot;</span>, encoding=<span class="hljs-string">&quot;utf-8&quot;</span>)<br><span class="hljs-built_in">print</span>(b)  <span class="hljs-comment"># 输出 b&#x27;hello&#x27;</span><br><br><span class="hljs-comment"># 使用列表作为参数</span><br>b = <span class="hljs-built_in">bytes</span>([<span class="hljs-number">104</span>, <span class="hljs-number">101</span>, <span class="hljs-number">108</span>, <span class="hljs-number">108</span>, <span class="hljs-number">111</span>])<br><span class="hljs-built_in">print</span>(b)  <span class="hljs-comment"># 输出 b&#x27;hello&#x27;</span><br><br><span class="hljs-comment"># 使用元组作为参数</span><br>b = <span class="hljs-built_in">bytes</span>((<span class="hljs-number">104</span>, <span class="hljs-number">101</span>, <span class="hljs-number">108</span>, <span class="hljs-number">108</span>, <span class="hljs-number">111</span>))<br><span class="hljs-built_in">print</span>(b)  <span class="hljs-comment"># 输出 b&#x27;hello&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="decode"><a href="#decode" class="headerlink" title="decode( )"></a>decode( )</h3><p>在Python中，<code>decode()</code> 方法是用于将字节字符串转换为文本字符串的函数。它使用指定的编码格式将字节转换为文本。</p>
+<p>例如，如果你有一个以UTF-8编码的字节字符串，你可以使用以下代码将其转换为文本字符串：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">Copy codetext = <span class="hljs-string">b&#x27;hello world&#x27;</span><br>text_str = text.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)<br><span class="hljs-built_in">print</span>(text_str)  <span class="hljs-comment"># prints &quot;hello world&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>如果你想将一个文本字符串转换回字节字符串，你可以使用<code>encode()</code>方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">Copy codetext_str = <span class="hljs-string">&#x27;hello world&#x27;</span><br>text = text_str.encode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)<br><span class="hljs-built_in">print</span>(text)  <span class="hljs-comment"># prints b&#x27;hello world&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h2><p>位运算是指对二进制数字执行的运算。位运算包括按位与、按位或、按位异或、按位取反和位移运算。</p>
+<p>举个例子，如果你有两个二进制数字1010和0101，你可以执行以下位运算：</p>
+<ul>
+<li>按位与（&amp;）：1010 &amp; 0101 &#x3D; 0000</li>
+<li>按位或（|）：1010 | 0101 &#x3D; 1111</li>
+<li>按位异或（^）：1010 ^ 0101 &#x3D; 1111</li>
+<li>按位取反（<del>）：</del>1010 &#x3D; 0101</li>
+<li>左位移（&lt;&lt;）：1010 &lt;&lt; 1 &#x3D; 10100</li>
+<li>右位移（&gt;&gt;）：1010 &gt;&gt; 1 &#x3D; 0101</li>
+</ul>
+
                 
               </div>
             

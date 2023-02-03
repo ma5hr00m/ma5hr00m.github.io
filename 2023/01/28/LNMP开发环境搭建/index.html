@@ -1,0 +1,752 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/book.svg">
+  <link rel="icon" href="/img/book.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ma5hr00m">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="鼓捣鼓捣服务器与代理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAMP环境搭建">
+<meta property="og:url" content="http://ma5hr00m.top/2023/01/28/LNMP%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="ma5hr00m blog">
+<meta property="og:description" content="鼓捣鼓捣服务器与代理">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-28T11:41:07.000Z">
+<meta property="article:modified_time" content="2023-02-03T13:41:19.981Z">
+<meta property="article:author" content="ma5hr00m">
+<meta property="article:tag" content="🔨开发">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>LAMP环境搭建 - ma5hr00m blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ma5hr00m.top","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"🎉","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"FeZsjaUdx00EZCfIxSxBHYhi-MdYXbMMI","app_key":"0jlXrHGbVuyj4aQOUMjt2bdi","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ma5hr00m</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="LAMP环境搭建"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-28 19:41" pubdate>
+          2023年1月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">LAMP环境搭建</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>租了一台云服务器, 感觉可以鼓捣鼓捣.</p>
+<br>
+
+<h2 id="0x01-ssh远程连接服务器"><a href="#0x01-ssh远程连接服务器" class="headerlink" title="0x01 ssh远程连接服务器"></a>0x01 ssh远程连接服务器</h2><p>安装<code>openssh</code>客户端和服务端.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get install openssh-client <br>sudo apt-get install openssh-server <br></code></pre></td></tr></table></figure>
+
+<p>启动<code>ssh</code>服务.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo /etc/init.d/ssh start <br></code></pre></td></tr></table></figure>
+
+<p>生成密钥对.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ssh-keygen -t rsa<br></code></pre></td></tr></table></figure>
+
+<p>将客户端的<code>~/.ssh/id_rsa.pub</code>内容复制到服务器的<code>~/.ssh/.authorized_keys</code>中.</p>
+<p>然后使用<code>ssh</code>指令指定用户连接即可.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ssh &lt;username&gt;@&lt;ip_address&gt;<br></code></pre></td></tr></table></figure>
+
+<br>
+
+<h2 id="0x02-搭建LAMP环境"><a href="#0x02-搭建LAMP环境" class="headerlink" title="0x02 搭建LAMP环境"></a>0x02 搭建LAMP环境</h2><h3 id="Apache2"><a href="#Apache2" class="headerlink" title="Apache2"></a>Apache2</h3><p>指令一步到位, 安装后会自行开启apache服务.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt install -y apache2<br></code></pre></td></tr></table></figure>
+
+<p>运行以下指令检查apache服务运行状态.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">systemctl status apache2<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">前三行输出</span><br>● apache2.service - The Apache HTTP Server<br>     Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)<br>     Active: active (running) since Wed 2023-02-01 16:00:13 CST; 29s ago<br>     ...<br></code></pre></td></tr></table></figure>
+
+<p>如果先前已经设置好了域名指向该服务器, 此时访问该域名可以接收到<code>Apache2 Ubuntu Default Page</code>.</p>
+<p>以下为一些基本的控制apache服务的指令.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl enable apache2<br>sudo systemctl start apache2<br>sudo systemctl restart apache2<br></code></pre></td></tr></table></figure>
+
+<h3 id="MariaDB"><a href="#MariaDB" class="headerlink" title="MariaDB"></a>MariaDB</h3><p>指令一步到位.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt install -y mariadb-server mariadb-client<br></code></pre></td></tr></table></figure>
+
+<p>同样是安装后自启动, 输入以下指令检查运行状态.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl status mariadb<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">前三行输出</span><br>● mariadb.service - MariaDB 10.3.37 database server<br>     Loaded: loaded (/lib/systemd/system/mariadb.service; enabled; vendor preset: enabled)<br>     Active: active (running) since Wed 2023-02-01 16:10:30 CST; 45s ago<br>     ...<br></code></pre></td></tr></table></figure>
+
+<p>进行一下初始化安全设置. 这时并没有root密码, 直接<code>Enter</code>跳过, 初始化程序会提醒你设置新密码, 之后按照要求选择服务配置即可.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo mysql_secure_installation<br></code></pre></td></tr></table></figure>
+
+<p>常用指令基本同<code>Apache2</code>, 更改一下服务名称即可.</p>
+<h3 id="PHP7-4"><a href="#PHP7-4" class="headerlink" title="PHP7.4"></a>PHP7.4</h3><p>安装<code>PHP7.4</code>以及一些常用的库.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt install php7.4 libapache2-mod-php7.4 php7.4-mysql php-common php7.4-cli php7.4-common php7.4-json php7.4-opcache php7.4-readline<br></code></pre></td></tr></table></figure>
+
+<p>编写一个<code>hello.php</code>.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Hello, PHP!\n&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>运行文件,终端里输出<code>Hello, PHP!</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">php hello.php<br></code></pre></td></tr></table></figure>
+
+<p>启动<code>Apache PHP7.4</code>模块后重启<code>apache</code>服务.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo a2enmod php7.4 &amp;&amp; sudo systemctl restart apache2<br></code></pre></td></tr></table></figure>
+
+<p>在文档根目录<code>/var/www/html</code>创建一个<code>hello.php</code>文件, 保存后, 在浏览器访问<code>server-ip-address/hello.php</code>, 可以看到页面上显示出了<code>Hell0, 5erver!</code>. </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>	<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Hell0, 5erver!&quot;</span>;<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>至此, <code>LAMP</code>环境搭建完成.</p>
+<br>
+
+<h3 id="0x03-修改apache2服务默认站点目录"><a href="#0x03-修改apache2服务默认站点目录" class="headerlink" title="0x03 修改apache2服务默认站点目录"></a>0x03 修改apache2服务默认站点目录</h3><p><code>apache2</code>的默认站点目录路径为<code>/var/www/html</code>, 会有些不方便, 修改配置文件可以更改站点目录.</p>
+<p><code>apache2</code>站点目录配置文件了路径为<code>/etc/apache2/sites-available</code>.</p>
+<p><code>000-default.conf</code>配置文件中, 可以看到:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">ServerAdmin webmaster@localhost<br>DocumentRoot <span class="hljs-regexp">/var/</span>www/html<br></code></pre></td></tr></table></figure>
+
+<p> <code>DocumentRoot</code>即为站点目录路径, 比如, 我想把站点目录路径设置为<code>/home/ubuntu/app</code>, 可以将其修改为:</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">ServerAdmin webmaster@localhost<br>DocumentRoot <span class="hljs-regexp">/home/u</span>buntu/app<br></code></pre></td></tr></table></figure>
+
+<p>然后, 打开<code>/etc/apache2/apache2.conf</code>配置文件, 可以看到以下内容.</p>
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs nsis">&lt;<span class="hljs-literal">Directory</span> /<span class="hljs-keyword">var</span>/www/&gt;<br>        Options Indexes FollowSymLinks<br>        AllowOverride <span class="hljs-literal">None</span><br>        Require <span class="hljs-literal">all</span> granted<br>&lt;/<span class="hljs-literal">Directory</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<p>这里的路径仍是默认目录, 将其修改成上边修改过的路径即可.</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-section">&lt;Directory /home/ubuntu/app&gt;</span><br>        <span class="hljs-attribute">Options</span> Indexes FollowSymLinks<br>        <span class="hljs-attribute">AllowOverride</span> None<br>        <span class="hljs-attribute">Require</span> <span class="hljs-literal">all</span> granted<br><span class="hljs-section">&lt;/Directory&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>然后重启<code>apache</code>服务即可.</p>
+<h3 id="0x04-nc实现简单聊天时遇到的一点小问题"><a href="#0x04-nc实现简单聊天时遇到的一点小问题" class="headerlink" title="0x04 nc实现简单聊天时遇到的一点小问题"></a>0x04 nc实现简单聊天时遇到的一点小问题</h3><p><code>nc</code>指的是<code>netcat</code>或者<code>ncat</code>命令行程序, 在<code>ubuntu</code>下可以通过以下命令安装.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt install netcat<br></code></pre></td></tr></table></figure>
+
+<p> 可以通过以下指令实现两台机器间的简单聊天.</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-comment"># server</span><br><span class="hljs-attribute">nc</span> -l <span class="hljs-number">127.0.0.1</span> <span class="hljs-number">9999</span><br><br><span class="hljs-comment"># client</span><br><span class="hljs-attribute">nc</span> sever-ip <span class="hljs-number">9999</span><br></code></pre></td></tr></table></figure>
+
+<p>但当我这样操作时, 会发现本地和服务器无法建立联系.</p>
+<p>一顿瞎捣腾之后发现是云服务器的防火墙没有开放端口…</p>
+<p><code>server</code>处设置开放某个指定端口即可 ( 我这里开放了9999 ).</p>
+<br>
+
+<h2 id="0x05-正向代理-amp-反向代理"><a href="#0x05-正向代理-amp-反向代理" class="headerlink" title="0x05 正向代理 &amp; 反向代理"></a>0x05 正向代理 &amp; 反向代理</h2><h3 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h3><p>可以理解为<code>客户端代理</code>, 服务对象是客户端, 作用是<strong>帮助客户端转发请求给目标服务器</strong>.</p>
+<p>多个客户端可以使用同一个代理服务器, 代理服务器接收到请求后会将其转发给指定服务器, 并将返回的数据传回给客户.</p>
+<p>在这一过程中, 目标服务器只能知道是代理服务器向它发送了请求, 而无法得知真正的客户是谁.</p>
+<h3 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h3><p>可以理解为<code>服务端代理</code>, 服务对象是服务端, 作用是<strong>把请求转发给指定的服务器</strong>.</p>
+<p>注意, 与正向代理不同, <strong>反向代理只为指定的服务器转发代理</strong>, 可以理解为反向代理服务器是给目标服务器套的一个壳.</p>
+<p>例如, 服务器 <code>a</code> 设置了反向代理服务器 <code>b</code>, 客户端是 <code>c</code>.</p>
+<p>当<code>c</code>想要通过访问<code>a</code>时, <code>c</code>的请求会被被迫地发送给<code>b</code>, 然后由<code>b</code>转发给<code>a</code>, <code>a</code>返回的数据会经由<code>b</code>再转发给<code>c</code>, 而此时客户不知道自己的请求经过了反向代理服务器<code>b</code>的转发, 在客户眼里, 他只是请求了目标服务器 <code>a</code>, 并接收了返回的数据而已.</p>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>二者的区别就是代理的对象, 正向代理的对象是客户端, 而反向代理的对象是服务端.</p>
+<br>
+
+<h3 id="0x06-云服务器挂载-clash"><a href="#0x06-云服务器挂载-clash" class="headerlink" title="0x06 云服务器挂载 clash"></a>0x06 云服务器挂载 clash</h3><p>额, 没有鼓捣成功, 这里留个坑…</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%F0%9F%94%A8%E5%BC%80%E5%8F%91/">#🔨开发</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LAMP环境搭建</div>
+      <div>http://ma5hr00m.top/2023/01/28/LNMP开发环境搭建/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ma5hr00m</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年1月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/01/21/2023-hgame-xss/" title="2023 HGAME Week2 XSS&amp;CSRF">
+                        <span class="hidden-mobile">2023 HGAME Week2 XSS&amp;CSRF</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FeZsjaUdx00EZCfIxSxBHYhi-MdYXbMMI","appKey":"0jlXrHGbVuyj4aQOUMjt2bdi","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/ma5hr00m" target="_blank" rel="nofollow noopener"><span>Copyright © 2022 ma5hr00m</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

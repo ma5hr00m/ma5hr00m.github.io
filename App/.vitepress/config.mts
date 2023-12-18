@@ -36,11 +36,12 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2023年12月', items: [
-          { text: 'Manjaro续航优化', link: '/archives/2023/12/linux-battery' },
+          { text: 'CVE-2023-32314复现', link: '/archives/2023/12/cve-2023-32314' },
           { text: 'DNSSEC安全拓展', link: '/archives/2023/12/dnssec' },
         ]},
         { text: '2023年11月', items: [
           { text: 'Maven学习笔记', link: '/archives/2023/11/mvn' },
+          { text: 'Linux中Python环境管理', link: '/archives/2023/11/python-env' },
           { text: 'JavaWeb Getting Deeper', link: '/archives/2023/11/javaweb-deeper' },
         ]},
         { text: '2023年10月', items: [

@@ -36,7 +36,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2023年12月', items: [
-          { text: 'CVE-2023-32314复现', link: '/archives/2023/12/cve-2023-32314' },
+          { text: '杭州小记·清河坊&伍公山&雷峰塔', link: '/archives/2023/12/hangzhou-trip-02' },
           { text: 'DNSSEC安全拓展', link: '/archives/2023/12/dnssec' },
         ]},
         { text: '2023年11月', items: [

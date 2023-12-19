@@ -116,18 +116,13 @@ sudo vim /etc/docker/daemon.json
 添加国内源：
 ```json
 {
-  "registry-mirrors": [
-    "https://hub-mirror.c.163.com",
-    "https://ustc-edu-cn.mirror.aliyuncs.com",
-    "https://ghcr.io",
-    "https://mirror.baidubce.com"
-  ]
+  "registry-mirrors": ["https://docker.m.daocloud.io/"]
 }
 ```
 
 保存后退出，重启 docker 服务。换源完成。
 
-> 不同源也是存在区别的，使用前一定要注意。
+> 不同源也是存在区别的，使用前一定要注意。参考这篇教程：[Docker Hub 镜像加速器](https://gist.github.com/y0ngb1n/7e8f16af3242c7815e7ca2f0833d3ea6)
 
 ## 安装 Portainer
 使用命令行管理少数 docker 容器可能挺方便，可要是容器多起来就会变得繁琐，且命令行中的数据也不够直观。

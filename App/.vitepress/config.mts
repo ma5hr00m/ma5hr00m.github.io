@@ -8,9 +8,16 @@ export default defineConfig({
       'script',
       {
         async: '',
-        src: 'http://umami.ma5hr00m.top/script.js',
-        datawebsiteId: '326f7654-999a-463a-ba6e-eccf10914e28',
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-KWZ7L6T7SE',
       },
+    ],
+    [
+      'script',
+      { id: 'google-tag' },
+      ` window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-KWZ7L6T7SE');`
     ]
   ],
   description: "Maintain Enthusiasm and Stay Cheerful",
@@ -36,6 +43,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2023年12月', items: [
+          { text: 'Supabase+Vercel部署Umami', link: '/archives/2023/12/supabase-vercel-umami' },
           { text: '杭州小记·清河坊&伍公山&雷峰塔', link: '/archives/2023/12/hangzhou-trip-02' },
           { text: 'DNSSEC安全拓展', link: '/archives/2023/12/dnssec' },
         ]},

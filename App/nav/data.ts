@@ -7,7 +7,7 @@ type NavData = {
 
 export const NAV_DATA: NavData[] = [
   {
-    "title": "技术平台",
+    "title": "技术交流平台",
     "items": [
       {
         icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
@@ -52,15 +52,15 @@ export const NAV_DATA: NavData[] = [
         link: 'https://segmentfault.com/',
       },
       {
-        icon: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200x200-min.png',
-        title: 'GeeksforGeeks',
-        desc: '面向程序员和计算机科学爱好者的网站，提供了大量关于数据结构、算法、编程语言、系统设计、操作系统、数据库等方面的教程和文章。',
-        link: 'https://www.geeksforgeeks.org/',
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
       },
     ]
   },
   {
-    "title": "资源集合",
+    "title": "高质量周刊/资料",
     "items": [
       {
         icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
@@ -82,15 +82,9 @@ export const NAV_DATA: NavData[] = [
       },
       {
         icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
-        title: '科技爱好者周刊issue',
+        title: '科技爱好者周刊 issue',
         desc: '阮一峰科技爱好者周刊仓库下的issue，优质的技术文章和产品聚集地，非常热闹',
         link: 'https://github.com/ruanyf/weekly/issues',
-      },
-      {
-        icon: 'https://roadmap.sh/manifest/favicon.ico',
-        title: 'Developer Roadmap',
-        desc: 'Interactive roadmaps, guides and other educational content to help developers grow in their careers',
-        link: 'https://roadmap.sh/',
       },
       {
         icon: '',
@@ -101,7 +95,42 @@ export const NAV_DATA: NavData[] = [
     ]
   },
   {
-    "title": "网络安全",
+    "title": "学习资料/文档",
+    "items": [
+      {
+        icon: 'https://roadmap.sh/manifest/favicon.ico',
+        title: 'Developer Roadmap',
+        desc: 'Interactive roadmaps, guides and other educational content to help developers grow in their careers',
+        link: 'https://roadmap.sh/',
+      },
+      {
+        icon: 'https://developer.mozilla.org/favicon-48x48.cbbd161b.png',
+        title: 'MDN',
+        desc: 'Documenting web technologies, including CSS, HTML, and JavaScript, since 2005.',
+        link: 'https://developer.mozilla.org/zh-CN/',
+      },
+      {
+        icon: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200x200-min.png',
+        title: 'GeeksforGeeks',
+        desc: '面向程序员和计算机科学爱好者的网站，提供了大量关于数据结构、算法、编程语言、系统设计、操作系统、数据库等方面的教程和文章。',
+        link: 'https://www.geeksforgeeks.org/',
+      },
+      {
+        icon: 'https://static.runoob.com/images/favicon.ico',
+        title: '菜鸟教程',
+        desc: '菜鸟教程(www.runoob.com)提供了编程的基础技术教程, 介绍了HTML、CSS、Javascript、Python，Java，Ruby，C，PHP , MySQL等各种编程语言的基础知识',
+        link: 'https://www.runoob.com/',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
+    ]
+  },
+  {
+    "title": "安全社区/文档",
     "items": [
       {
         icon: 'https://1517081779-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/collections%2FmuMguNrsRx2mNyNqEox4%2Ficon%2F1qCJ0VIDlWcvGSecYCDq%2Ffondo.png?alt=media&token=1e721267-450f-43f3-861b-6c4f93278e93',
@@ -189,7 +218,7 @@ export const NAV_DATA: NavData[] = [
     ]
   },
   {
-    "title": "写作工具",
+    "title": "笔记/知识库工具",
     "items": [
       {
         icon: 'https://p1-hera.feishucdn.com/tos-cn-i-jbbdkfciu3/1ec7129d900e442d8501d810efdaa369~tplv-jbbdkfciu3-image:0:0.image',
@@ -248,7 +277,7 @@ export const NAV_DATA: NavData[] = [
     ]
   },
   {
-    "title": "AI工具",
+    "title": "AI问答工具",
     "items": [
       {
         icon: 'https://cdn.oaistatic.com/_next/static/media/favicon-32x32.be48395e.png',
@@ -287,12 +316,6 @@ export const NAV_DATA: NavData[] = [
         link: 'https://www.perplexity.ai/',
       },
       {
-        icon: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://diagram.com',
-        title: 'Diagram',
-        desc: 'Unleash your creativity with Diagram\'s AI-powered design tools.',
-        link: 'https://diagram.com',
-      },
-      {
         icon: '',
         title: '',
         desc: '',
@@ -301,7 +324,7 @@ export const NAV_DATA: NavData[] = [
     ]
   },
   {
-    "title": "设计工具",
+    "title": "绘画设计工具",
     "items": [
       {
         icon: 'https://static.figma.com/app/icon/1/favicon.svg',
@@ -315,10 +338,22 @@ export const NAV_DATA: NavData[] = [
         desc: 'Krita 是一款自由开源的免费绘画软件，无需注册、无广告、试用期或者商用限制，让每一位画师都可以有尊严地表达创意',
         link: 'https://krita.org/zh/',
       },
+      {
+        icon: 'https://www.adobe.com/content/dam/acom/one-console/icons_rebrand/ps_appicon.svg',
+        title: 'Photoshop',
+        desc: '由Adobe 开发和发行的最专业、强大、功能齐全的图像处理软件，提供对Windows 和 macOS 操作系统的支持',
+        link: 'https://www.adobe.com/hk_zh/products/photoshop/landpa.html?gclid=CjwKCAiAvoqsBhB9EiwA9XTWGYk75uLm49qb0OBjH5EBDLiVYFVno2i-_6w-4vxoqbuekH5TBxaupBoC_9oQAvD_BwE&sdid=GVTYXXRQ&mv=search&mv2=paidsearch&ef_id=CjwKCAiAvoqsBhB9EiwA9XTWGYk75uLm49qb0OBjH5EBDLiVYFVno2i-_6w-4vxoqbuekH5TBxaupBoC_9oQAvD_BwE:G:s&s_kwcid=AL!3085!3!474060793403!e!!g!!photoshop!706204247!37727711995&gad_source=1',
+      },
+      {
+        icon: 'https://www.painttoolsai2.com/img/paint-tool-sai-2-favican.png',
+        title: 'SAI2',
+        desc: 'Paint Tool SAI 2 Free Download Full Version 2023 is Best graphics editor and painting tools. Latest version available for Windows & Mac. It\'s Free and Safe.',
+        link: 'https://www.painttoolsai2.com/',
+      },
     ]
   },
   {
-    title: '设计资源',
+    title: '美术设计资源',
     items: [
       {
         icon: 'https://www.svgrepo.com/favicon.ico',
@@ -417,6 +452,29 @@ export const NAV_DATA: NavData[] = [
         link: '',
       },
     ],
+  },
+  {
+    "title": "在线阅读/文献参考",
+    "items": [
+      {
+        icon: 'https://z-lib.is/favicon-32x32.svg?v=2',
+        title: 'Z-Library',
+        desc: 'Z-Library. The world\'s largest ebook library | Ebooks library. Find books Download Free Online books store on Z-Library.',
+        link: 'https://z-lib.is/',
+      },
+      {
+        icon: 'https://www.cnki.net/favicon.ico',
+        title: '中国知网',
+        desc: '中国知识基础设施建设工程',
+        link: 'https://www.cnki.net/index/',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
+    ]
   },
   {
     "title": "",

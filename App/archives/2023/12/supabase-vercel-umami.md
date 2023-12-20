@@ -82,6 +82,9 @@ npx prisma migrate resolve --applied 01_init
 
 注意哦，这里的操作应该在第二步之后、第三步之前。
 
+## 参考
+- [How to run Umami Analytics + Supabase + Vercel for free](https://route360.dev/en/post/umami-supabase/), by Route360
+
 ## 后话
 
 跟着以上步骤走，可以零成本、轻松地部署自己的umami服务。如果你相对umami了解更多，包括怎么使用umami统计自己站点的数据，可以去看看官方文档，十分详细：[umami Docs](https://umami.is/docs)。

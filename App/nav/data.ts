@@ -10,10 +10,16 @@ export const NAV_DATA: NavData[] = [
     "title": "技术平台",
     "items": [
       {
-        icon: 'https://github.githubassets.com/favicons/favicon.svg',
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
         title: 'GitHub',
         desc: '全球最大的代码托管平台，含金量不必多说',
         link: 'https://github.com/',
+      },
+      {
+        icon: 'https://cdn.sstatic.net/Sites/stackoverflow/Img/favicon.ico?v=ec617d715196',
+        title: 'Stack Overflow',
+        desc: 'Stack Overflow is the largest, most trusted online community for developers to learn, share​ ​their programming ​knowledge, and build their careers',
+        link: 'https://stackoverflow.com/',
       },
       {
         icon: 'https://lf3-cdn-tos.bytescm.com/obj/static/xitu_juejin_web/static/favicons/favicon-32x32.png',
@@ -28,10 +34,286 @@ export const NAV_DATA: NavData[] = [
         link: 'https://zsxq.com/',
       },
       {
+        icon: 'https://static.zhihu.com/heifetz/favicon.ico',
+        title: '知乎',
+        desc: '中文互联网高质量的问答社区和创作者聚集的原创内容平台（故事汇）',
+        link: 'https://www.zhihu.com/',
+      },
+      {
+        icon: 'https://www.v2ex.com/static/icon-192.png',
+        title: 'V2EX',
+        desc: 'V2EX 是一个关于分享和探索的地方',
+        link: 'https://www.v2ex.com/',
+      },
+      {
+        icon: 'https://static.segmentfault.com/main_site_next/20baa25b/touch-icon.png',
+        title: '思否',
+        desc: '思否是中国专业的开发者技术社区。我们以技术问答、技术博客、技术课程、技术资讯为核心的产品形态，为开发者提供纯粹、高质的技术交流平台',
+        link: 'https://segmentfault.com/',
+      },
+      {
+        icon: 'https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200x200-min.png',
+        title: 'GeeksforGeeks',
+        desc: '面向程序员和计算机科学爱好者的网站，提供了大量关于数据结构、算法、编程语言、系统设计、操作系统、数据库等方面的教程和文章。',
+        link: 'https://www.geeksforgeeks.org/',
+      },
+    ]
+  },
+  {
+    "title": "资源集合",
+    "items": [
+      {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: 'AI绘画资料合集',
+        desc: 'AI绘画资料合集（包含国内外可使用平台、使用教程、参数教程、部署教程、业界新闻等等',
+        link: 'https://github.com/hua1995116/awesome-ai-painting',
+      },
+      {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: 'Python 潮流周刊',
+        desc: 'Python 潮流周刊，分享文章、教程、开源项目、软件工具、播客和视频、热门话题等内容 ',
+        link: 'https://github.com/chinesehuazhou/python-weekly',
+      },
+      {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: '科技爱好者周刊',
+        desc: '阮一峰的网络日志：周刊，每周五发布 ',
+        link: 'https://www.ruanyifeng.com/blog/weekly/',
+      },
+      {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: '科技爱好者周刊issue',
+        desc: '阮一峰科技爱好者周刊仓库下的issue，优质的技术文章和产品聚集地，非常热闹',
+        link: 'https://github.com/ruanyf/weekly/issues',
+      },
+      {
+        icon: 'https://roadmap.sh/manifest/favicon.ico',
+        title: 'Developer Roadmap',
+        desc: 'Interactive roadmaps, guides and other educational content to help developers grow in their careers',
+        link: 'https://roadmap.sh/',
+      },
+      {
         icon: '',
         title: '',
         desc: '',
         link: '',
+      },
+    ]
+  },
+  {
+    "title": "网络安全",
+    "items": [
+      {
+        icon: 'https://1517081779-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/collections%2FmuMguNrsRx2mNyNqEox4%2Ficon%2F1qCJ0VIDlWcvGSecYCDq%2Ffondo.png?alt=media&token=1e721267-450f-43f3-861b-6c4f93278e93',
+        title: 'HackTricks',
+        desc: 'Welcome to the wiki where you will find each hacking trick/technique/whatever I have learnt from CTFs, real life apps, reading researches, and news.',
+        link: 'https://book.hacktricks.xyz/welcome/readme',
+      },
+      {
+        icon: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://cve.mitre.org/',
+        title: 'CVE',
+        desc: 'The mission of the CVE® Program is to identify, define, and catalog publicly disclosed cybersecurity vulnerabilities',
+        link: 'https://cve.mitre.org/',
+      },
+      {
+        icon: 'https://forum.butian.net/ico.png',
+        title: '奇安信攻防社区',
+        desc: '奇安信攻防社区,白帽子,漏洞,安全技术,360,补天,安全研究,攻防',
+        link: 'https://forum.butian.net/',
+      },
+      {
+        icon: 'https://www.freebuf.com/favicon.ico',
+        title: 'FreeBuf',
+        desc: '国内领先的网络安全行业门户，同时也是爱好者们交流与分享安全技术的社区',
+        link: 'https://www.freebuf.com/',
+      },
+      {
+        icon: 'https://ctf-wiki.org/assets/images/favicon.png',
+        title: 'CTF Wiki',
+        desc: 'CTF Wiki 对 CTF 中的各个方向的知识进行介绍，以便于初学者更好地学习 CTF 相关的知识。',
+        link: 'https://ctf-wiki.org/',
+      },
+      {
+        icon: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://websec.readthedocs.io',
+        title: 'Web安全学习笔记',
+        desc: 'Study Notes For Web Hacking / Web安全学习笔记 ',
+        link: 'https://websec.readthedocs.io/zh/latest/index.html',
+      },
+      {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: 'sec-note',
+        desc: '记录安全方面的笔记/工具/漏洞合集',
+        link: 'https://github.com/reidmu/sec-note',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
+    ]
+  },
+  {
+    "title": "云服务平台",
+    "items": [
+      {
+        icon: 'https://img.alicdn.com/tfs/TB1_ZXuNcfpK1RjSZFOXXa6nFXa-32-32.ico',
+        title: '阿里云',
+        desc: '开启云上动手实践，探索技术创意边界',
+        link: 'https://home.console.aliyun.com/',
+      },
+      {
+        icon: '//cloudcache.tencent-cloud.com/qcloud/app/resource/ac/favicon.ico',
+        title: '腾讯云',
+        desc: '性能强大、安全、稳定的云产品，腾讯多年技术沉淀，300+ 款产品共筑腾讯云产品矩阵',
+        link: 'https://console.cloud.tencent.com/',
+      },
+      {
+        icon: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.dynadot.com',
+        title: 'Dynadot',
+        desc: '一家经过ICANN认证的智能域名注册商，专注于为用户提供简洁、优惠、安全的域名管理和网络托管服务',
+        link: 'https://www.dynadot.com/zh/',
+      },
+      {
+        icon: 'https://www.cloudflare.com/favicon.ico',
+        title: 'Cloudflare',
+        desc: '集成化云服务平台，专注网站应用和SaaS访问加速、安全防护、稳定在线。提供免费CDN、无限制服务器ddos防御，防cc攻击、sql注入、僵尸网络攻击',
+        link: 'https://www.cloudflare.com/zh-cn/',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
+    ]
+  },
+  {
+    "title": "写作工具",
+    "items": [
+      {
+        icon: 'https://p1-hera.feishucdn.com/tos-cn-i-jbbdkfciu3/1ec7129d900e442d8501d810efdaa369~tplv-jbbdkfciu3-image:0:0.image',
+        title: '飞书文档',
+        desc: '强大，无需多言，不论是单人使用还是多人协作，体验均极佳',
+        link: 'https://www.feishu.cn/product/docs',
+      },
+      {
+        icon: 'https://typora.io/img/favicon-64.png',
+        title: 'Typora',
+        desc: '强大的 Markdown 编辑/阅读器，支持即时渲染，平台支持广泛，旧版本免费',
+        link: 'https://typora.io/',
+      },
+      {
+        icon: 'https://www.notion.so/front-static/favicon.ico',
+        title: 'Notion',
+        desc: 'A new tool that blends your everyday work apps into one. It\'s the all-in-one workspace for you and your team.',
+        link: 'https://www.notion.so/',
+      },
+      {
+        icon: 'https://obsidian.md/favicon.svg',
+        title: 'Obsidian',
+        desc: 'Obsidian is the private and flexible writing app that adapts to the way you think',
+        link: 'https://obsidian.md/',
+      },
+      {
+        icon: 'https://c1-onenote-15.cdn.office.net/o/resources/1033/FavIcon_OneNote.ico',
+        title: 'OneNote',
+        desc: 'Microsoft旗下的在线笔记软件，功能非常强大，但加载速度略慢',
+        link: 'https://www.onenote.com/',
+      },
+      {
+        icon: 'https://marktext.github.io/website/favicon.png',
+        title: 'MarkText',
+        desc: '简洁优雅的Markdon编辑器，注重速度和可用性。官方仓库最近一次更新在2022年03月',
+        link: 'https://www.marktext.cc/',
+      },
+      {
+        icon: 'https://excalidraw.com/favicon-32x32.png',
+        title: 'Excalidraw',
+        desc: 'Excalidraw is a virtual collaborative whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them',
+        link: 'https://excalidraw.com/',
+      },
+      {
+        icon: 'https://mdn.alipayobjects.com/huamei_0prmtq/afts/img/A*vMxOQIh4KBMAAAAAAAAAAAAADvuFAQ/original',
+        title: '语雀',
+        desc: '优秀的文档和知识库工具（网传快停止维护了，见仁见智）',
+        link: 'https://www.yuque.com/',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
+    ]
+  },
+  {
+    "title": "AI工具",
+    "items": [
+      {
+        icon: 'https://cdn.oaistatic.com/_next/static/media/favicon-32x32.be48395e.png',
+        title: 'ChatGPT Next Web',
+        desc: 'Vidar-Team拼车ChatGPT，目前开放3.5版本，协会成员专享',
+        link: 'https://chatgpt.potat0.cc/#/chat',
+      },
+      {
+        icon: 'https://www.bing.com/sa/simg/bing_p_rr_teal_min.ico',
+        title: 'New Bing',
+        desc: '具有 GPT-4 的 Copilot，可以使用多媒体数据或者分析在线链接',
+        link: 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx',
+      },
+      {
+        icon: 'https://www.phind.com/images/favicon.png',
+        title: 'phind',
+        desc: 'Phind是一款面向程序员的 AI 搜索引擎',
+        link: 'https://www.phind.com/search?home=true',
+      },
+      {
+        icon: 'https://devv.ai/favicon-dark.png',
+        title: 'devv_',
+        desc: '最懂程序员的新一代 AI 搜索引擎，计算机领域特化',
+        link: 'https://devv.ai/zh',
+      },
+      {
+        icon: 'https://chat.aimakex.com/favicon.svg',
+        title: '智造喵',
+        desc: '智造喵，智造猫，AI中文智能对话，内置多种prompt',
+        link: 'https://chat.aimakex.com/chat',
+      },
+      {
+        icon: 'https://www.perplexity.ai/favicon.svg',
+        title: 'Perplexity',
+        desc: 'Perplexity AI unlocks the power of knowledge with information discovery and sharing',
+        link: 'https://www.perplexity.ai/',
+      },
+      {
+        icon: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://diagram.com',
+        title: 'Diagram',
+        desc: 'Unleash your creativity with Diagram\'s AI-powered design tools.',
+        link: 'https://diagram.com',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
+    ]
+  },
+  {
+    "title": "设计工具",
+    "items": [
+      {
+        icon: 'https://static.figma.com/app/icon/1/favicon.svg',
+        title: 'figma',
+        desc: 'Figma is the leading collaborative design tool for building meaningful products. ',
+        link: 'https://www.figma.com/',
+      },
+      {
+        icon: 'https://krita.org/wp-content/themes/krita-org-theme/images/favicon.ico',
+        title: 'Krita',
+        desc: 'Krita 是一款自由开源的免费绘画软件，无需注册、无广告、试用期或者商用限制，让每一位画师都可以有尊严地表达创意',
+        link: 'https://krita.org/zh/',
       },
     ]
   },
@@ -98,42 +380,43 @@ export const NAV_DATA: NavData[] = [
         desc: '强大的壁纸资源网站',
         link: 'https://wallpapercave.com/',
       },
+      {
+        icon: 'https://www.emojiall.com/favicon.ico',
+        title: 'EMOJIALL',
+        desc: '该网站提供了最新、完整的Emoji搜索和相关信息，包括表情符号含义、使用示例、Unicode代码点、高分辨率图片、复制和粘贴，以及Emoji大数据排名、矢量图形和动态图表、智能算法情感分析和表情符号语言学研究',
+        link: 'https://www.emojiall.com/zh-hans',
+      },
+      {
+        icon: 'https://css.gg/fav/favicon-96x96.png',
+        title: 'CSS Icons',
+        desc: 'Open-source CSS, SVG and Figma UI Icons. Available in SVG Sprite, styled-components, NPM & API',
+        link: 'https://css.gg/',
+      },
+      {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: 'Noise Creator',
+        desc: '在线生成噪点图像，数十种噪点图可选，支持自定义参数',
+        link: 'https://noisecreater.com/',
+      },
+      {
+        icon: 'https://www.gstatic.com/images/icons/material/apps/fonts/1x/catalog/v5/favicon.svg',
+        title: 'Google Fonts',
+        desc: 'Google 官方字体仓库，海量字体素材，支持在线预览以及下载字体文件',
+        link: 'https://fonts.google.com/',
+      },
+      {
+        icon: 'https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://www.chuangkit.com/',
+        title: '创客贴',
+        desc: '极简好用的平面设计作图软件,在线图片编辑器,免费使用.提供免费设计模板，有海报、名片、公众号图片、PPT、邀请函等65个场景模板,一键搞定设计印刷',
+        link: 'https://www.chuangkit.com/',
+      },
+      {
+        icon: '',
+        title: '',
+        desc: '',
+        link: '',
+      },
     ],
-  },
-  {
-    "title": "AI工具",
-    "items": [
-      {
-        icon: 'https://cdn.oaistatic.com/_next/static/media/favicon-32x32.be48395e.png',
-        title: 'ChatGPT Next Web',
-        desc: 'Vidar-Team拼车ChatGPT，目前开放3.5版本，协会成员专享',
-        link: 'https://chatgpt.potat0.cc/#/chat',
-      },
-      {
-        icon: 'https://www.bing.com/sa/simg/bing_p_rr_teal_min.ico',
-        title: 'New Bing',
-        desc: '具有 GPT-4 的 Copilot，可以使用多媒体数据或者分析在线链接',
-        link: 'https://www.bing.com/search?q=Bing+AI&showconv=1&FORM=hpcodx',
-      },
-      {
-        icon: 'https://www.phind.com/images/favicon.png',
-        title: 'phind',
-        desc: 'Phind是一款面向程序员的 AI 搜索引擎',
-        link: 'https://www.phind.com/search?home=true',
-      },
-      {
-        icon: 'https://devv.ai/favicon-dark.png',
-        title: 'devv_',
-        desc: '最懂程序员的新一代 AI 搜索引擎，计算机领域特化',
-        link: 'https://devv.ai/zh',
-      },
-      {
-        icon: 'https://chat.aimakex.com/favicon.svg',
-        title: '智造喵',
-        desc: '智造喵，智造猫，AI中文智能对话，内置多种prompt',
-        link: 'https://chat.aimakex.com/chat',
-      },
-    ]
   },
   {
     "title": "",

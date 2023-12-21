@@ -43,6 +43,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2023年12月', items: [
+          { text: '为Markdown添加动态内容', link: '/archives/2023/12/markdown-dynamic-content' },
           { text: 'Supabase+Vercel部署Umami', link: '/archives/2023/12/supabase-vercel-umami' },
           { text: '杭州小记·清河坊&伍公山&雷峰塔', link: '/archives/2023/12/hangzhou-trip-02' },
           { text: 'DNSSEC安全拓展', link: '/archives/2023/12/dnssec' },
@@ -81,11 +82,13 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ma5hr00m' },
-      { icon: 'twitter', link: 'https://twitter.com/NineLight99/highlights' }
+      { icon: {
+          svg: '<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="256.000000pt" height="256.000000pt" viewBox="0 0 256.000000 256.000000" preserveAspectRatio="xMidYMid meet"><g transform="translate(0.000000,256.000000) scale(0.100000,-0.100000)" fill="#97979f" stroke="none"><path d="M535 2543 c-181 -24 -364 -150 -447 -309 -76 -146 -72 -95 -76 -909 -2 -487 1 -752 8 -799 30 -191 143 -353 310 -440 141 -74 92 -70 916 -74 835 -3 825 -4 973 69 159 78 279 235 316 414 22 103 22 1467 0 1570 -37 179 -157 336 -316 414 -145 72 -136 71 -939 69 -393 0 -728 -3 -745 -5z m863 -618 l113 -90 -28 -23 c-15 -13 -68 -55 -117 -93 l-88 -69 -41 32 c-119 95 -179 146 -177 154 1 11 213 184 220 181 4 -1 57 -42 118 -92z m-469 -290 c242 -193 346 -275 351 -275 3 0 93 71 200 156 107 86 201 158 208 161 7 3 34 -12 60 -34 26 -22 59 -48 75 -57 48 -32 66 -12 -238 -251 -104 -81 -214 -168 -244 -192 -29 -24 -57 -43 -61 -43 -5 0 -26 15 -47 33 -22 17 -55 43 -73 57 -19 14 -88 68 -154 120 -67 53 -161 127 -209 165 -48 38 -86 74 -85 81 3 13 138 123 152 124 4 0 34 -20 65 -45z m-363 -268 c40 -34 208 -166 344 -272 42 -33 139 -109 214 -168 76 -59 143 -110 150 -113 7 -3 64 36 127 85 63 50 139 110 169 134 30 24 141 111 245 194 105 82 200 156 211 163 20 12 28 8 98 -46 41 -32 74 -64 73 -71 -1 -6 -31 -34 -67 -62 -77 -61 -209 -165 -578 -456 l-272 -216 -238 188 c-130 103 -255 202 -277 219 -22 18 -121 96 -220 174 -99 77 -181 145 -183 150 -4 10 138 130 154 130 6 0 28 -15 50 -33z"/></g></svg>'
+        }, link: 'https://juejin.cn/user/811865333304430' },
     ],
 
     editLink: {
-      pattern: 'https://github.com/ma5hr00m',
+      pattern: 'https://github.com/ma5hr00m/ma5hr00m.github.io',
       text: '分享文章请注明出处'
     },
 

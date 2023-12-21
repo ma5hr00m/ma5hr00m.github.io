@@ -446,6 +446,18 @@ export const NAV_DATA: NavData[] = [
         link: 'https://www.chuangkit.com/',
       },
       {
+        icon: 'https://res.cloudinary.com/practicaldev/image/fetch/s--eWZ6RXEZ--/c_limit,f_png,fl_progressive,q_80,w_180/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8j7kvp660rqzt99zui8e.png',
+        title: 'Awesome Badges ',
+        desc: 'How often do you find yourself struggling to create a readme file after finishing a project so that...',
+        link: 'https://dev.to/envoy_/150-badges-for-github-pnk',
+      },
+      {
+        icon: 'https://shields.io/img/favicon.ico',
+        title: 'Shields.io',
+        desc: 'Concise, consistent, and legible badges',
+        link: 'https://shields.io/',
+      },
+      {
         icon: '',
         title: '',
         desc: '',
@@ -467,6 +479,12 @@ export const NAV_DATA: NavData[] = [
         title: '中国知网',
         desc: '中国知识基础设施建设工程',
         link: 'https://www.cnki.net/index/',
+      },
+      {
+        icon: 'https://pubscholar.cn/static/favicon-wfn3fg.ico',
+        title: 'PubScholar公益学术平台',
+        desc: 'PubScholar公益学术平台是中国科学院作为国家战略科技力量的主力军，履行学术资源保障“国家队”职责，为满足全国科技界和全社会科技创新的学术资源基础保障需求，建设的提供公益性学术资源的检索发现、内容获取和交流共享等服务的平台。平台在尊重知识产权和国际通行规范的前提下，发挥中国科学院自身拥有丰富且高质量学术资源的优势，带动国内外的学术资源机构积极合作，最大限度地开放优质学术资源。目前，平台整合集成了中国科学院的科技成果资源、科技出版资源和学术交流资源；OA环境下允许集成服务的学术资源；以及通过协议授权或其它合作共建模式获得授权许可的学术资源。',
+        link: 'https://pubscholar.cn/',
       },
       {
         icon: '',

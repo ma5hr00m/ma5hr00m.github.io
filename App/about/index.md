@@ -17,3 +17,5 @@ Hello Hello, 我是 Ma5hr00m，一名大学生，在杭州上学。
 在MBTI测试中，我的性格类型是**INFJ-T**。
 
 如果你对我 or 我的博客感兴趣，可以通过这个邮箱联系我：kzsoso@163.com
+
+<img src="http://123.206.118.236/check=blog">

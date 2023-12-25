@@ -87,6 +87,12 @@ export const NAV_DATA: NavData[] = [
         link: 'https://github.com/ruanyf/weekly/issues',
       },
       {
+        icon: 'https://github.githubassets.com/favicons/favicon-dark.png',
+        title: 'favorite link',
+        desc: '每天收集喜欢的开源项目 | RSS 订阅 | 快知 app 订阅 ',
+        link: 'https://github.com/guanguans/favorite-link',
+      },
+      {
         icon: '',
         title: '',
         desc: '',

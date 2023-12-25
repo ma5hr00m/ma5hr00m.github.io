@@ -43,6 +43,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2023年12月', items: [
+          { text: 'Learn to live in Terminal', link: '/archives/2023/12/learn-to-live-in-terminal' },
           { text: '为Markdown添加动态内容', link: '/archives/2023/12/markdown-dynamic-content' },
           { text: 'Supabase+Vercel部署Umami', link: '/archives/2023/12/supabase-vercel-umami' },
           { text: '杭州小记·清河坊&伍公山&雷峰塔', link: '/archives/2023/12/hangzhou-trip-02' },

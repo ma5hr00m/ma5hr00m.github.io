@@ -92,3 +92,7 @@ ps uax | grep process_name # 指定进程信息
 输出的信息更详细，不贴在博客里了，使用`man atop`指令可以查看atop内置的帮助文档。
 
 ### htop
+
+:::info
+wip
+:::

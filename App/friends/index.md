@@ -40,6 +40,11 @@ const friends = [
     name: 'Ec3o',
     org: '杭助后端开发 | Vidar学弟',
     orgLink: 'https://ec3o.github.io'
+  }, {
+    avatar: 'http://119.91.208.190/img/mysid.png',
+    name: 'mysid',
+    org: '努力学习 | Vidar学弟',
+    orgLink: 'http://119.91.208.190'
   },
 ]
 </script>

@@ -26,6 +26,11 @@ const friends = [
     org: '高数小王子 | 狂暴摆烂组长',
     orgLink: 'http://rippleqaq.top'
   }, {
+    avatar: 'http://q1.qlogo.cn/g?b=qq&nk=1286518974&s=640',
+    name: 'ch405',
+    org: 'Vidar Misc/Web | 互联网史官',
+    orgLink: 'http://ch405.live'
+  }, {
     avatar: 'http://q1.qlogo.cn/g?b=qq&nk=1641064392&s=640',
     name: 'zbwer',
     org: '前端开发进行时 | 华科学长',
@@ -33,17 +38,17 @@ const friends = [
   }, {
     avatar: 'https://xyxsw.ltd/images/head/head.jpg',
     name: 'camera-2018',
-    org: '杭助前端学长',
+    org: 'HDUHelper | 前端开发',
     orgLink: 'https://xyxsw.ltd/'
   }, {
     avatar: 'https://ec3o.github.io/images/avatar.webp',
     name: 'Ec3o',
-    org: '杭助后端开发 | Vidar学弟',
+    org: 'Vidar Web | HDUHelper',
     orgLink: 'https://ec3o.github.io'
   }, {
     avatar: 'http://119.91.208.190/img/mysid.png',
     name: 'mysid',
-    org: '努力学习 | Vidar学弟',
+    org: 'Vidar Web | 努力-ing',
     orgLink: 'http://119.91.208.190'
   },
 ]

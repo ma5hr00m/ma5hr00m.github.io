@@ -17,7 +17,7 @@ export default defineConfig({
       ` window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-KWZ7L6T7SE');`
+        gtag('config', 'G-KWZ7L6T7SE', {'user_id': '313114514'});`
     ]
   ],
   description: "Maintain Enthusiasm and Stay Cheerful",
@@ -42,6 +42,9 @@ export default defineConfig({
     sidebar: {
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
+        { text: '2024年01月', items: [
+          { text: '基于GA Reporting API v4实现博客浏览量统计', link: '/archives/2024/01/ga4-counter' },
+        ]},
         { text: '2023年12月', items: [
           { text: '2023年终总结', link: '/archives/2023/12/year-end-review' },
           { text: 'Learn to live in Terminal', link: '/archives/2023/12/learn-to-live-in-terminal' },

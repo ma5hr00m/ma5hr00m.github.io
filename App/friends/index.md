@@ -36,11 +36,6 @@ const friends = [
     org: '前端开发进行时 | 华科学长',
     orgLink: 'https://blog.zbwer.work/'
   }, {
-    avatar: 'https://xyxsw.ltd/images/head/head.jpg',
-    name: 'camera-2018',
-    org: 'HDUHelper | 前端开发',
-    orgLink: 'https://xyxsw.ltd/'
-  }, {
     avatar: 'https://ec3o.github.io/images/avatar.webp',
     name: 'Ec3o',
     org: 'Vidar Web | HDUHelper',

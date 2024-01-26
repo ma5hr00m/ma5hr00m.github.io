@@ -43,6 +43,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2024年01月', items: [
+          { text: '网络空间安全技术理论课复习', link: '/archives/2024/01/end-review' },
           { text: '基于GA Reporting API v4实现博客浏览量统计', link: '/archives/2024/01/ga4-counter' },
         ]},
         { text: '2023年12月', items: [

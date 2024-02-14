@@ -43,7 +43,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2024年02月', items: [
-          { text: 'Manjaro体验优化', link: '/archives/2024/02/manjaro-experience-optimization' },
+          { text: '使用Android Studio开发Widget安卓桌面组件', link: '/archives/2024/02/android-studio-app-widget' },
         ]},
         { text: '2024年01月', items: [
           { text: '网络空间安全技术理论课复习', link: '/archives/2024/01/end-review' },

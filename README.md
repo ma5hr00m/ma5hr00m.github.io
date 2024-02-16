@@ -1,7 +1,7 @@
 # ma5hr00m.github.io
 
 <div align='center'>
-  <img style='height:200px; border-radius:50%;' alt='ma5hr00m-avatar' src='http://q1.qlogo.cn/g?b=qq&nk=2048728823&s=640'>
+  <img style='height:200px; border-radius:50%;' alt='ma5hr00m-avatar' src='https://img.ma5hr00m.top/blog/20240216014457.png'>
   <h2 
     style=
     '
@@ -16,6 +16,7 @@
     class='gradient-text'>Ma5hr00m</h2>
 </div>
 
+![20240216014457]()
 
 Ma5hr00m的个人博客，Vitepress驱动，内含学习笔记、生活记录，以及常用网址导航页。
 
@@ -25,3 +26,8 @@ Ma5hr00m的个人博客，Vitepress驱动，内含学习笔记、生活记录，
 
 ## Blog Status
 [![Ma5hr00m Blog Status Image](http://123.206.118.236/check?service=blog)](https://ma5hr00m.top)
+
+<!--
+https://img.ma5hr00m.top/blog/20240216014457.png 有背景-大
+https://img.ma5hr00m.top/blog/20240216101525.png 无背景-大
+-->

@@ -6,9 +6,8 @@ hero:
   text: Slumbering in the Fairy Forest
   tagline: Cyber Security · Web Develop · UI Desigh
   image:
-    src: http://q1.qlogo.cn/g?b=qq&nk=2048728823&s=640
+    src: https://img.ma5hr00m.top/blog/20240216014457.png
     alt: Ma5hr00m
-    style: border-radius:50%;
   actions:
     - theme: brand
       text: Start Viewed

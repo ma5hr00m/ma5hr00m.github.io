@@ -43,7 +43,7 @@ export default defineConfig({
     sidebar: {
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
-        { text: '2024年01月', items: [
+        { text: '2024年02月', items: [
           { text: 'JavaScript执行原理', link: '/archives/2024/02/how-js-run' },
         ]},
         { text: '2024年01月', items: [

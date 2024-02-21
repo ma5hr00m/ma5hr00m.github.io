@@ -441,8 +441,8 @@ fixed_mix_mode: 1
 /**
  * raw data
  */
-const account = '13863288199'
-const password = 'tuxijuejin821'
+const account = '00000000000'
+const password = '1q2w3e'
 
 /**
  * handle account and password

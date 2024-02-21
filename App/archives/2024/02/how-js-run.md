@@ -32,7 +32,7 @@ JS Engine 其实就可以理解为上文中所说的虚拟机。机器底层的 
 
 我们可以把 JS Runtime 理解为一栋房子，JS 代码都需要在这栋房子中运行。而这栋房子由很多部分共同组成，包括 JS Engine、外部 API 和回调队列（callback queue）。有时也把 JS 用到的 core lib 核心库看作 Runtime 的一部分。
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=MTI2MDI3YTA3YjY4OTg3MTliYWQ1NWQ4ZDk5NzA0Y2FfcHU1N1lDU0E1WWh6M1N6MWh6Z0w4UGw0azZiR2d4NWVfVG9rZW46T01EUGJGeFNpb0VXWTZ4dWNIM2NMb3FFbkllXzE3MDg0NTIyMzE6MTcwODQ1NTgzMV9WNA)
+![20240221083858](https://img.ma5hr00m.top/blog/20240221083858.png)
 
 以 Chrome 浏览器的 JS Runtime 举例，浏览器的 Runtime 由对应的 JS Engine、Web API 和回调队列组成。JS Engine 在上文中有讲，不再赘述；Web API 是浏览器提供给 Engine 的一系列接口，并不是 JS 的一部分，目的是方便操纵数据和增强浏览器的功能，常用的 Web API 包括 DOM、Web Worker 等；回调队列包括准备好执行的回调函数，回调队列确保回调以先进先出（FIFO）方法执行，并在堆栈为空时将其传递到堆栈中。
 
@@ -156,7 +156,7 @@ Bytecode 是一种包含执行程序、由一序列 op 代码/数据对组成的
 
 早期的 V8 直接将 AST 编译为机器码，然后在机器中执行，因为这样的效率更高。但机器码会占用过多的系统内存，相比之下，Bytecode 占用的内存空间远比机器码少得多，Google 团队遂选择以时间换空间，转换为现在的 AST->Bytecode->机器码。
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=MTZkZGUxNzMzOTUzYjlmYzY1ODQzNTNhNTM3NWU3MzhfUHB4eHMwdVZKSTBESFNQUkJRajhrMmkwN0t5ZXcwaXJfVG9rZW46UUZZemI2UXJUbzJTcHd4a0dkZ2NDMkFlbjJiXzE3MDg0NTIyMzE6MTcwODQ1NTgzMV9WNA)
+![20240221083929](https://img.ma5hr00m.top/blog/20240221083929.png)
 
 Node.js 提供了很多关于 V8 引擎的选项，比如`--print-bytecode`用于获取源码对应的字节码。
 

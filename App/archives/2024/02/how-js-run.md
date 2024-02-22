@@ -1,8 +1,14 @@
-# JavaScript执行原理
+# JavaScript 执行原理
 
 最近在复习 JavaScript 反混淆相关内容，正好给执行原理补个档，之前旧版的随旧博客一起遗失了，这里重新写了一篇。
 
 预计之后还会有 [JavaScript执行原理·补](#) 和 [JavaScript混淆/反混淆](#)，慢慢写吧。
+
+:::tip
+
+跳转到 [JavaScript混淆/反混淆](https://ma5hr00m.top/archives/2024/02/js-obfuscation-deobfuscation.html)
+
+:::
 
 ## JavaScript
 

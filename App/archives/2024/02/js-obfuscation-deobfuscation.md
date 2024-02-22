@@ -247,11 +247,11 @@ console.log(fibonacci(10));
 
 在 Source 模块中，默认`ctrl+shift+p`可以开启开发者工具的命令行，我们可以找到两个“搜索”工具，分别对应“全局搜索”和“在当前文件中搜索”，很适合查找指定字段。
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDhjMjE4MzAwOWIxMWU0YzU2NTU3YzJhMjM0OWU1NTVfVXBtVE5qczMzV2JpMUpLdFZOaU44ZDE2M1ZzMTZVVUtfVG9rZW46VEFZTWJQajVDbzFNNlJ4NnVxRGNuRlFSblViXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095405](https://img.ma5hr00m.top/blog/20240222095405.png)
 
 开发者工具提供了替换（Override）功能，开启本地替换选项，上传自己的目录，然后选中浏览器中指定 JS 文件，做出修改后`ctrl+s`保存，即可将源文件保存到我们自己的目录中，之后对文件做出的修改可以直接替换对应的原文件，这样就能方便的修改浏览器端 JS 文件。
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmUxNWEzMjNjM2VlZmMwM2QxZDNmMDYwYTNmYTBjNDBfbWJndWxtMVAwNWt1TVN1N3hpRExNVGVURExBVGR0NUNfVG9rZW46T1FEbGJmMFRSb1RYbGp4OFlTNGM0V1ZTbldiXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095414](https://img.ma5hr00m.top/blog/20240222095414.png)
 
 剩下的就是动调了，后面会举例子解释。
 
@@ -268,7 +268,7 @@ console.log(fibonacci(10));
 
 未登录状态下翻译字符串，观察 Network 可以找到`/v2transapi` POST 请求报文，其 payload 中表单的 `query`字段即为我们输入待翻译的字符串。
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=NjgzNGVlNDFiODJhNWY2MWVjZmVkOWYwMDVmZWE2MGVfamVBM1NRSTBhbTRHT1d3M1N2MllkNTg4a0d6WHl6bU9fVG9rZW46TFdmU2J5QnNyb2U0OVR4RWViRWNySzNKbk1lXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095423](https://img.ma5hr00m.top/blog/20240222095423.png)
 
 刷新页面多次翻译，发现只有`sign`字段的值在随`query`一直变化，`transtype`的值会根据触发翻译的方式在`realtime`和`enter`之间切换，其它字段值保持不变。我们接下来的任务就是分析`sign`字段的值是怎么来的。
 
@@ -276,11 +276,11 @@ console.log(fibonacci(10));
 
 在 Sources 模块中全局搜索`sign:`，定位到很多文件，根据文件名和文件内容，可以判断最有可能在 index.36217dc5.js 文件中，而该文件中出现了 6 处`sign:`相关代码，依次打断点并执行翻译操作，发现只会在 25800 行处的`sign: b(e);`处停下：
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=OTFmZDYzNjk4MDQ5MjdlYTA3NzBhODRiMmI0MTdhMGJfRWJ1ZDdsTGRHNnlKTXBvdHV4THdaREZ2U0xNejBUV3pfVG9rZW46WDVMbWJPMkRnb015M294VnRYWmNPUUw5bkZmXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095432](https://img.ma5hr00m.top/blog/20240222095432.png)
 
 单步步进，可以发现参数 t 值即为传入的字符串：
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=YjZmZGI4NDQ2YTc1OGUwZDY0MzdhN2VhYTJlMDk1MmVfUndGdUFkSHRueURSa2xFZXlTMWphOHE1WG1MRk40QXhfVG9rZW46WUx4YmI1OHZZb242OXF4bVY4ZmM1QVRjbjhkXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095443](https://img.ma5hr00m.top/blog/20240222095443.png)
 
 把这段函数抽离出来，写到一个 main.js 文件中，调用该函数并运行：
 
@@ -334,15 +334,15 @@ console.log(b(query))
 
 运行时报错，提示`r`未定义。在继续动调去找`r`是什么。步进调试到这一步时，发现`r`被赋值为`window[d]`，即 "320305.131321201"，在此之前其值一直为null。
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDM1NWYwZTFiOTIzNTUxOGFkZGM4YjZmN2NkYzUxMzhfdGZFU1Y4Vkh1Z2lKWVRvdFpWeUdLTGNSaDRQNHJRT3NfVG9rZW46VzlmOGJYRTA2b2RBWlR4SHlOWmNNclZZbk9jXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095453](https://img.ma5hr00m.top/blog/20240222095453.png)
 
 我们可以发现`d`的值为`gtk`。我们本地是通过 Node.js 运行 JS 脚本，没有`window[]`这种 Web API，所以直接将`320305.131321201`硬编码进去。在此运行脚本，又会提示缺少`n`函数：
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=NWNmODM2MGNhMTA3MDIyNjA2MGM3NWRmODJlNzhiODFfNUlyTlF5NTVMTmxpcUozYmU1Zm1QaUkwVVZOWkUzUXVfVG9rZW46VUhxNWJWVjB4b0FjMWZ4Sjl2bmN2dzVmbm4wXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095459](https://img.ma5hr00m.top/blog/20240222095459.png)
 
 我们在面板中找到`n`函数，光标悬浮于上方可直接跳转到函数声明的地方：
 
-![img](https://xru013bpln.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTQ3YzljZGIyZThiMTYzNDdjMzU4M2VhNDM4MDk5ZWNfY0tNZjlQQnRRSkh6TXg5c2R5a2NSbWNlcFlTQWVUajdfVG9rZW46RkNFUmJsSng5b2JtWWZ4SGZBdmNyaWd5bmhiXzE3MDg1MTQwNDQ6MTcwODUxNzY0NF9WNA)
+![20240222095511](https://img.ma5hr00m.top/blog/20240222095511.png)
 
 找到`n`函数后将其添加到 JS 脚本中，再次运行，即可得到结果`103339.356506`，这与我们在 Network 模块中查看到的`sign`值相同。
 

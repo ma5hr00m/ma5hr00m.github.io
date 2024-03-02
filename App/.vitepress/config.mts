@@ -44,6 +44,7 @@ export default defineConfig({
       '/archives/': [
         { text: '归档页面', link: '/archives/' },
         { text: '2024年02月', items: [
+          { text: 'Nginx进程模型浅析', link: '/archives/2024/02/overview-of-nginx-process-model' },
           { text: 'JavaScript作用域与提升', link: '/archives/2024/02/js-scope-and-hoisting' },
           { text: 'JavaScript原型链详解', link: '/archives/2024/02/js-prototype-chain' },
           { text: 'JavaScript混淆与反混淆', link: '/archives/2024/02/js-obfuscation-deobfuscation' },

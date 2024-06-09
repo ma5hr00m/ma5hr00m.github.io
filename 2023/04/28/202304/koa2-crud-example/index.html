@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="暑期的尾声渐近，创新实践课的老师突然要验收暑期学习成果，愚蠢的阿菇对此事完全没有印象……毫无准备的他决定临时搓个小东西出来。前端肯定是要用 React 来做，后端嘛……思来想去，准备学习 koa 现学现卖一下。之前没用 node.js 写过后端，想尝试尝试新东西，单纯为了补作业而写东西感觉不值…… 准备先了解一些基本概念。 koakoa 是一个基于 Node.js 的 Web 开发框架，提供了一种">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 Koa2+SQLite 构建 CRUD API">
+<meta property="og:url" content="https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/index.html">
+<meta property="og:site_name" content="菇物语">
+<meta property="og:description" content="暑期的尾声渐近，创新实践课的老师突然要验收暑期学习成果，愚蠢的阿菇对此事完全没有印象……毫无准备的他决定临时搓个小东西出来。前端肯定是要用 React 来做，后端嘛……思来想去，准备学习 koa 现学现卖一下。之前没用 node.js 写过后端，想尝试尝试新东西，单纯为了补作业而写东西感觉不值…… 准备先了解一些基本概念。 koakoa 是一个基于 Node.js 的 Web 开发框架，提供了一种">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230828212321994.png">
+<meta property="og:image" content="https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230828220513695.png">
+<meta property="og:image" content="https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230829135418397.png">
+<meta property="og:image" content="https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230829141158347.png">
+<meta property="article:published_time" content="2023-04-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-09T12:56:25.626Z">
+<meta property="article:author" content="ma5hr00m">
+<meta property="article:tag" content="ma5hr00m, blog, 阿菇, 技术, 个人博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230828212321994.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://img.ma5hr00m.top/blog/im-favicon.svg">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="https://img.ma5hr00m.top/blog/im-favicon.svg" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="https://img.ma5hr00m.top/blog/im-favicon.svg">
+        
+      
+    
+    <!-- title -->
+    <title>基于 Koa2+SQLite 构建 CRUD API</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JYGWHCT9EX"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JYGWHCT9EX');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023/05/02/202305/docker-base/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/01/26/202301/unocss-theme/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&text=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&is_video=false&description=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于 Koa2+SQLite 构建 CRUD API&body=Check out this article: https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&name=基于 Koa2+SQLite 构建 CRUD API&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&t=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#koa"><span class="toc-number">1.1.</span> <span class="toc-text">koa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sqlite"><span class="toc-number">1.2.</span> <span class="toc-text">sqlite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E6%A6%82%E6%8B%AC"><span class="toc-number">3.</span> <span class="toc-text">实战场景概括</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="toc-number">4.</span> <span class="toc-text">初始化项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init-ping"><span class="toc-number">5.</span> <span class="toc-text">init &amp; ping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#database"><span class="toc-number">6.</span> <span class="toc-text">database</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#schema"><span class="toc-number">7.</span> <span class="toc-text">schema</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#modules"><span class="toc-number">8.</span> <span class="toc-text">modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controllers"><span class="toc-number">9.</span> <span class="toc-text">controllers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#router-api"><span class="toc-number">10.</span> <span class="toc-text">router&#x2F;api</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bodyparser-cors"><span class="toc-number">11.</span> <span class="toc-text">bodyparser &amp; cors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90"><span class="toc-number">11.1.</span> <span class="toc-text">参数解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%9F%9F"><span class="toc-number">11.2.</span> <span class="toc-text">跨域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#app"><span class="toc-number">12.</span> <span class="toc-text">app</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-number">13.</span> <span class="toc-text">测试工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96"><span class="toc-number">14.</span> <span class="toc-text">优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">15.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AF%9D"><span class="toc-number">16.</span> <span class="toc-text">后话</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        基于 Koa2+SQLite 构建 CRUD API
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">ma5hr00m</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-04-27T16:00:00.000Z" class="dt-published" itemprop="datePublished">2023-04-28</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Node-js/">Node.js</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>暑期的尾声渐近，创新实践课的老师突然要验收暑期学习成果，愚蠢的阿菇对此事完全没有印象……毫无准备的他决定临时搓个小东西出来。前端肯定是要用 React 来做，后端嘛……思来想去，准备学习 koa 现学现卖一下。之前没用 node.js 写过后端，想尝试尝试新东西，单纯为了补作业而写东西感觉不值……</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>先了解一些基本概念。</p>
+<h3 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h3><p><code>koa</code> 是一个基于 Node.js 的 Web 开发框架，提供了一种<strong>简洁优雅</strong>的方式来处理 HTTP 请求和响应。我个人觉得 koa 就是精简版的 Express，删减了路由、视图渲染等多种功能，同时在中间件以及异步处理等方面进行了一些优化。</p>
+<p>可以去 <a target="_blank" rel="noopener" href="https://www.koajs.com.cn/">👋koa 官网</a> 进一步了解。但官网阅读起来比较难受，目录不是很好，但一手文档的参考简直自然是没得说。</p>
+<p>如果只想要快速上手 koa 开发，阿菇更推荐下面这个教程：</p>
+<p><a target="_blank" rel="noopener" href="https://chenshenhai.github.io/koa2-note/">《Koa3 进阶学习笔记》</a></p>
+<h3 id="sqlite"><a href="#sqlite" class="headerlink" title="sqlite"></a>sqlite</h3><p><code>sqlite</code> 是一个嵌入式 SQL 数据库引擎，它提供了一种简单、轻量级且独立的方法来存储和管理数据。它不需要单独的服务器进程，可以直接在应用程序中使用。它不像 MySQL 那么笨重，轻便到你只需要在你的项目中留有一个 sqlite.db 即可，对初学者来说省去了很多配置环境的麻烦（阿菇首次接触到的数据库就是 sqlite）。</p>
+<h2 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h2><p><code>MVC</code> 是一个最基本的核心架构知识，以后会经常用到。你是离不开它的🤗。</p>
+<p><img src="https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230828212321994.png" alt="MVC架构图"></p>
+<p>MVC 模式，全称为 Model-View-Controller（模型-视图-控制器）模式，它是一种软件架构模式，其目标是将软件的用户界面（即前台页面）和业务逻辑分离，使代码具有更高的可扩展性、可复用性、可维护性以及灵活性。</p>
+<p>具体到代码层面，MVC 将应用程序分为三个主要部分：模型（Model）、视图（View）和控制器（Controller）。Model 负责数据的存储和处理，Controller 负责业务逻辑的处理和协调，View 负责数据的可视化呈现给用户。</p>
+<p>MVC 模式的优势在于分离关注点、提高代码的可重用性和可维护性。通过将应用程序分成模型、视图和控制器，实现更好地组织代码、降低模块之间的耦合度，并提供了良好的扩展性和可测试性。</p>
+<p>除了 MVC，还有其他一些常见的架构模式，这里不做展开介绍😜，感兴趣的请自行前往以下链接了解：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Model-view-presenter">MVP模式（Model-View-Presenter）</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel">MVVM模式（Model-View-ViewModel）</a></li>
+</ul>
+<h2 id="实战场景概括"><a href="#实战场景概括" class="headerlink" title="实战场景概括"></a>实战场景概括</h2><p>在接下来的实战中，我们会实现一个 <code>users</code> 表，包括 id、username 和 password 三个列，并基于这个表使用 koa 以及相关库实现 crud api 接口，并在完成后使用 <code>postman</code> 工具进行测试。</p>
+<p>不想听我啰嗦的可以直接去看 GitHub 项目地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ma5hr00m/koa2-crud-example">koa2-crud-example</a></p>
+<h2 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h2><p>常用的 koa 语法前往官网自行了解 👉<a target="_blank" rel="noopener" href="https://www.koajs.com.cn/#application">Koa 中文网</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 初始化 node.js 项目</span></span><br><span class="line"><span class="built_in">mkdir</span> example</span><br><span class="line"><span class="built_in">cd</span> example</span><br><span class="line">yarn init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 koa</span></span><br><span class="line">yarn add -D koa</span><br></pre></td></tr></table></figure>
+
+<h2 id="init-ping"><a href="#init-ping" class="headerlink" title="init &amp; ping"></a>init &amp; ping</h2><p>该部分参考：<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025933764960">处理 URL - 廖雪峰的官方网站</a>。这个文章会告诉你如何搭建一个基础的 koa 服务，并编写一个 <code>/ping</code> api 进行示范。</p>
+<p>你需要先安装一些依赖库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D koa-router require-directory</span><br></pre></td></tr></table></figure>
+
+<p><code>koa-router</code> 是一个用于 koa 框架的路由中间件，它提供了类似于 Express 的路由功能（例如 app.get、app.put、app.post 等）。它支持命名 URL 参数、命名路由与 URL 生成、匹配特定主机的路由、响应带有允许方法的 OPTIONS 请求、支持 405 方法不允许和 501 未实现等特性。</p>
+<p><code>require-directory</code> 可以递归地遍历指定目录，使用 <code>require()</code> 加载每个文件，并返回包含这些模块的嵌套哈希结构。它可以用来自动加载目录中的所有模块，而不需要手动一个一个地加载（似乎只适配 Common JS）。</p>
+<p>完成以下代码，你能实现一个最基本的 koa 后端服务，当你访问 <a target="_blank" rel="noopener" href="http://localhost:3000/ping">http://localhost:3000/ping</a> 时能得到一个 <code>pong!</code> 响应。</p>
+<p>先来看看目录结构：</p>
+<div align='center'>
+    <img style='height:200px' src='https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230828220513695.png' />
+</div>
+
+<p><code>/core/init.js</code> 文件用于初始化 &#x2F;api&#x2F; 目录下所有 api 接口文件：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> requireDirectory = <span class="built_in">require</span>(<span class="string">&#x27;require-directory&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">InitManager</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">initCore</span>(<span class="params">app</span>) &#123;</span><br><span class="line">        <span class="title class_">InitManager</span>.<span class="property">app</span> = app;</span><br><span class="line">        <span class="title class_">InitManager</span>.<span class="title function_">initLoadRouters</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">initLoadRouters</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">function</span> <span class="title function_">whenLoadModule</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="title class_">Router</span>) &#123;</span><br><span class="line">                <span class="title class_">InitManager</span>.<span class="property">app</span>.<span class="title function_">use</span>(obj.<span class="title function_">routes</span>())</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> apiDirectory = <span class="string">`<span class="subst">$&#123;process.cwd()&#125;</span>/api`</span></span><br><span class="line">        </span><br><span class="line">        requireDirectory(<span class="variable language_">module</span>, apiDirectory, &#123;</span><br><span class="line">            <span class="attr">visit</span>: whenLoadModule</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title class_">InitManager</span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>/api/ping.js</code> 实现了一个简单的后端 api 接口，当用户访问 &#x2F;ping 路由时，后端服务会返回给用户一个 <code>pong!</code> 文本响应：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/ping&#x27;</span>,<span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">    ctx.<span class="property">body</span> = <span class="string">&#x27;pong!&#x27;</span>;</span><br><span class="line">&#125; );</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = router;</span><br></pre></td></tr></table></figure>
+
+<p><code>/app.js</code> 是入口文件，初始化一个 Koa 对象，调用 <code>init.js</code> 启用所有 api 接口，然后监听本地 3000 端口：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Koa</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">InitManager</span> = <span class="built_in">require</span>(<span class="string">&#x27;./core/init&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Koa</span>();</span><br><span class="line"></span><br><span class="line"><span class="title class_">InitManager</span>.<span class="title function_">initCore</span>(app);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">3000</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`🎁 Listening on localhost:3000 ...`</span>);</span><br></pre></td></tr></table></figure>
+
+<p>完成以上代码后，在项目根目录执行以下指令启动服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node app.js</span><br></pre></td></tr></table></figure>
+
+<h2 id="database"><a href="#database" class="headerlink" title="database"></a>database</h2><p>先安装一些依赖库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D sqlite3 sequelize</span><br></pre></td></tr></table></figure>
+
+<p><code>sequelize</code> 是一个基于 promise 的 Node.js ORM（对象关系映射），可用于 PostgresSQL、MySQL、MariaDB、SQLite 和 Microsoft SQL Server 数据库。它提供了一种简单、灵活且强大的方法来定义模型和关系，并支持事务、迁移和复杂查询等高级功能。</p>
+<p>简单的说，就是大家都不想写 Raw SQL，觉得麻烦且存在安全问题，就封装了一套接口用来实现常用的 SQL 语句。</p>
+<p>我们在项目根目录下创建一个 <code>/database/db.js</code>，写入以下内容：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 你不需要手动创建 database.db，若代码检测到对应数据库不存在则会自动创建</span></span><br><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">Sequelize</span> &#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sequelize = <span class="keyword">new</span> <span class="title class_">Sequelize</span>(&#123;</span><br><span class="line">    <span class="attr">dialect</span>: <span class="string">&#x27;sqlite&#x27;</span>,</span><br><span class="line">    <span class="attr">storage</span>: <span class="string">&#x27;./sqlite.db&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    sequelize.<span class="title function_">authenticate</span>();</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Connect to database successfully`</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Connection failed: <span class="subst">$&#123;err&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123; sequelize &#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="schema"><a href="#schema" class="headerlink" title="schema"></a>schema</h2><p>我们在项目根目录下创建一个 <code>/schema/user.js</code>，该文件的作用是定义了数据库模型，方便我们在其他文件使用。写入以下内容：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">DataTypes</span> &#125; = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="keyword">function</span>(<span class="params">sequelize</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> sequelize.<span class="title function_">define</span>(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">id</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">DataTypes</span>.<span class="property">INTEGER</span>,</span><br><span class="line">            <span class="attr">primaryKey</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">autoIncrement</span>: <span class="literal">true</span>,</span><br><span class="line">            <span class="attr">allowNull</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">field</span>: <span class="string">&#x27;id&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">username</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">DataTypes</span>.<span class="property">TEXT</span>,</span><br><span class="line">            <span class="attr">allowNull</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">field</span>: <span class="string">&#x27;username&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">password</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">DataTypes</span>.<span class="property">TEXT</span>,</span><br><span class="line">            <span class="attr">allowNull</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">field</span>: <span class="string">&#x27;password&#x27;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="modules"><a href="#modules" class="headerlink" title="modules"></a>modules</h2><p>这段代码定义了一个名为 <code>userModel</code> 的类，它包含了一些静态方法，用于对数据库中的 <code>users</code> 表进行操作。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> db = <span class="built_in">require</span>(<span class="string">&#x27;../database/db&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> sequelize = db.<span class="property">sequelize</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> user = <span class="built_in">require</span>(<span class="string">&#x27;../schema/user&#x27;</span>)(sequelize);</span><br><span class="line">user.<span class="title function_">sync</span>(&#123;<span class="attr">force</span>: <span class="literal">false</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">userModel</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">showAllUsers</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> users = <span class="keyword">await</span> user.<span class="title function_">findAll</span>();</span><br><span class="line">        <span class="keyword">return</span> users;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">createUser</span>(<span class="params">username, password</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> newUser = <span class="keyword">await</span> user.<span class="title function_">create</span>(&#123;</span><br><span class="line">            username,</span><br><span class="line">            password</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> newUser;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">deleteUser</span>(<span class="params">username</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> user.<span class="title function_">destroy</span>(&#123;</span><br><span class="line">            <span class="attr">where</span>: &#123;</span><br><span class="line">                username</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">searchUser</span>(<span class="params">username</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> user.<span class="title function_">findOne</span>(&#123;</span><br><span class="line">            <span class="attr">where</span>: &#123;</span><br><span class="line">                username</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">updateUser</span>(<span class="params">userId, username, password</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> user.<span class="title function_">update</span>(&#123;</span><br><span class="line">            username,</span><br><span class="line">            password,</span><br><span class="line">        &#125;, &#123;</span><br><span class="line">            <span class="attr">where</span>: &#123;</span><br><span class="line">                <span class="attr">id</span>: userId</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = userModel;</span><br></pre></td></tr></table></figure>
+
+<h2 id="controllers"><a href="#controllers" class="headerlink" title="controllers"></a>controllers</h2><p>这段代码定义了一个名为 <code>userController</code> 的类，它包含了一些静态方法，用于处理与用户相关的 HTTP 请求。</p>
+<p>controllers 中的静态方法与上文提到的 modules 中的静态方法一一对应。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> userModel = <span class="built_in">require</span>(<span class="string">&#x27;../modules/user&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">userController</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">show</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> users = <span class="keyword">await</span> userModel.<span class="title function_">showAllUsers</span>();</span><br><span class="line">        ctx.<span class="property">response</span>.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">        ctx.<span class="property">body</span> = &#123;</span><br><span class="line">            <span class="attr">status</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: users</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">create</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> data = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">const</span> username = data.<span class="property">username</span>;</span><br><span class="line">        <span class="keyword">const</span> password = data.<span class="property">password</span>;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(username + <span class="string">&#x27; &#x27;</span> + password);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> newUser = <span class="keyword">await</span> userModel.<span class="title function_">createUser</span>(username, password);</span><br><span class="line">        ctx.<span class="property">response</span>.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">        ctx.<span class="property">body</span> = &#123;</span><br><span class="line">            <span class="attr">status</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: newUser</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">delete</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> data = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">const</span> username = data.<span class="property">username</span>;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> userModel.<span class="title function_">deleteUser</span>(username);</span><br><span class="line">        ctx.<span class="property">response</span>.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">        ctx.<span class="property">body</span> = &#123;</span><br><span class="line">            <span class="attr">status</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: result</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">search</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> data = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">const</span> username = data.<span class="property">username</span>;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> userModel.<span class="title function_">searchUser</span>(username);</span><br><span class="line">        ctx.<span class="property">response</span>.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">        ctx.<span class="property">body</span> = &#123;</span><br><span class="line">            <span class="attr">status</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: result</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">update</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> data = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">const</span> userId = data.<span class="property">userId</span>;</span><br><span class="line">        <span class="keyword">const</span> username = data.<span class="property">username</span>;</span><br><span class="line">        <span class="keyword">const</span> password = data.<span class="property">password</span>;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> userModel.<span class="title function_">updateUser</span>(userId, username, password);</span><br><span class="line">        ctx.<span class="property">response</span>.<span class="property">status</span> = <span class="number">200</span>;</span><br><span class="line">        ctx.<span class="property">body</span> = &#123;</span><br><span class="line">            <span class="attr">status</span>: <span class="number">200</span>,</span><br><span class="line">            <span class="attr">message</span>: <span class="string">&#x27;success&#x27;</span>,</span><br><span class="line">            <span class="attr">data</span>: result</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = userController;</span><br></pre></td></tr></table></figure>
+
+<h2 id="router-api"><a href="#router-api" class="headerlink" title="router&#x2F;api"></a>router&#x2F;api</h2><p>我们为每个接口单独创建一个文件，便于后期维护。每个接口也是对应到 <code>userControllers</code> 类中的静态方法。</p>
+<p><code>/api/show</code> 接口，用于展示当前数据库所有内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> userController = <span class="built_in">require</span>(<span class="string">&#x27;../controllers/user&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/api/show&#x27;</span>, userController.<span class="property">show</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = router;</span><br></pre></td></tr></table></figure>
+
+<p><code>/api/create</code> 接口，用于创建一个新的用户：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> userController = <span class="built_in">require</span>(<span class="string">&#x27;../controllers/user&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/api/create&#x27;</span>, userController.<span class="property">create</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = router;</span><br></pre></td></tr></table></figure>
+
+<p><code>/api/delete</code> 接口，用于删除一个用户：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> userController = <span class="built_in">require</span>(<span class="string">&#x27;../controllers/user&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/api/delete&#x27;</span>, userController.<span class="property">delete</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = router;</span><br></pre></td></tr></table></figure>
+
+<p><code>/api/search</code> 接口，用于查找一个用户：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> userController = <span class="built_in">require</span>(<span class="string">&#x27;../controllers/user&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/api/search&#x27;</span>, userController.<span class="property">search</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = router;</span><br></pre></td></tr></table></figure>
+
+<p><code>/api/update</code> 接口，用于更新一个用户的信息：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Router</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> userController = <span class="built_in">require</span>(<span class="string">&#x27;../controllers/user&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">Router</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/api/update&#x27;</span>, userController.<span class="property">update</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = router;</span><br></pre></td></tr></table></figure>
+
+<h2 id="bodyparser-cors"><a href="#bodyparser-cors" class="headerlink" title="bodyparser &amp; cors"></a>bodyparser &amp; cors</h2><h3 id="参数解析"><a href="#参数解析" class="headerlink" title="参数解析"></a>参数解析</h3><p>原生 kao 不支持解析 POST 请求正文数据，也就是说，此时你编写的 body 参数解析代码并不生效！</p>
+<p>就像我们编写的 controllers 部分代码需要解析 POST 请求主体并获取参数，此时并不会生效。比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /controllers/user.js</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">userController</span> &#123;</span><br><span class="line"> 	... ...</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">create</span>(<span class="params">ctx</span>) &#123;</span><br><span class="line">        <span class="comment">// 解析 POST 请求主体中的 username &amp; password 参数</span></span><br><span class="line">        <span class="keyword">const</span> data = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">        <span class="keyword">const</span> username = data.<span class="property">username</span>;</span><br><span class="line">        <span class="keyword">const</span> password = data.<span class="property">password</span>;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ... ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了解决这个问题，我们需要安装以下依赖库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D koa-bodyparser</span><br></pre></td></tr></table></figure>
+
+<p><code>koa-bodyparser</code> 是一个 koa 框架的中间件，它可以解析 HTTP 请求的正文（body）数据，并将解析后的数据存储在 <code>ctx.request.body</code> 中。它支持解析 JSON、表单和文本类型的正文数据，但不支持解析多部分格式（multipart）数据。也就是说，如果想要实现文件上传，我们还会需要其他的库。</p>
+<p>安装成功后，我们将以下代码添加到 app.js 中，之后我们用于解析 body 的代码就能够正常工作了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">&#x27;koa-bodyparser&#x27;</span>);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">bodyParser</span>());</span><br></pre></td></tr></table></figure>
+
+<h3 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h3><p>假设你的 koa 后端运行在 <a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000</a>，而你的 react 前端运行在 <a target="_blank" rel="noopener" href="http://localhost:5173/">http://localhost:5173</a>。如果此时你的前端服务向后端 api 发送请求，会遭到拒绝，提示存在跨域问题：</p>
+<div align='center'>
+    <img src='https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230829135418397.png' />
+</div>
+
+<p>最简单的解决方法就是在我们的 app.js 中添加一个用于处理跨域资源共享（CORS）的中间件，你可以通过以下指令安装这个库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D koa-cors</span><br></pre></td></tr></table></figure>
+
+<p>安装成功后，将以下代码添加到 app.js 中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cors = <span class="built_in">require</span>(<span class="string">&#x27;koa-cors&#x27;</span>);</span><br><span class="line">...</span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">cors</span>());</span><br></pre></td></tr></table></figure>
+
+<h2 id="app"><a href="#app" class="headerlink" title="app"></a>app</h2><p>在解决前面的工作之后，我们开始编写入口文件 app.js：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Koa</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">&#x27;koa-bodyparser&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> cors = <span class="built_in">require</span>(<span class="string">&#x27;koa-cors&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">InitManager</span> = <span class="built_in">require</span>(<span class="string">&#x27;./core/init&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Koa</span>();</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">cors</span>());</span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">bodyParser</span>());</span><br><span class="line"><span class="title class_">InitManager</span>.<span class="title function_">initCore</span>(app);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">3000</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`🎁 Listening on localhost:3000 ...`</span>);</span><br></pre></td></tr></table></figure>
+
+<p>完成之后，我们只需要在项目根目录下运行 <code>node app.js</code> 指令，即可启动我们的 koa 后端服务！</p>
+<h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><p>我们按照以上步骤实现了一套 koa-crud，还需要对其功能进行测试🤧。</p>
+<p>当然，你可以通过访问网页完成对 api 的测试，但这种方法局限性太大，不够灵活且很不方便。好在，现在有很多成熟的🔨工具供我们使用。</p>
+<p>我个人推荐 <code>postman</code>。</p>
+<p>postman 是一款用于测试和开发 API 的合作平台和工具。它提供了一个用户友好的界面，让开发人员能够轻松地发送 HTTP 请求、测试响应并与 API 进行交互</p>
+<p>使用 postman，你可以创建各种类型的 HTTP 请求（例如 GET、POST 和 PUT），设置请求参数（如头部、身体、查询参数等），发送请求，并查看服务器返回的响应。它还提供了断言（assertions）功能，用于验证API的响应是否符合预期。</p>
+<div align='center'>
+    <img src='https://agu-images.oss-cn-hangzhou.aliyuncs.com/test/image-20230829141158347.png' />
+</div>
+
+<p>下载使用都很简单，这里不做介绍，请自行前往 💥<a target="_blank" rel="noopener" href="https://www.postman.com/">postman 官网</a> 了解。</p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>以上代码就是 <code>kao+sqlite</code> 实现 CRUD 的简单实战，整套代码还有很多可以✨优化的地方。</p>
+<p>比如，调用这个 koa 服务中的 api 都需要使用 POST 请求，不符合目前流行的 <code>RESTful</code> 设计风格，后续可以进行调整（但 POST 一把嗦确实无脑易用🤣）。</p>
+<p>在 controllers 中，我也没有进行适当的错误处理，不方便 DEBUG，也是可以优化的点。</p>
+<p>对传入参数的处理也没有做，我不晓得 koa-bodyparser 有没有进行处理，也可能会存在安全问题。</p>
+<blockquote>
+<p>问题多多❤～摩多摩多❤～</p>
+</blockquote>
+<p>不过呢，这是阿菇第一次用 koa 写后端服务（其实后端都没怎么写过🥲），至少能跑起来了！后续会继续优化这个服务，并更新在 GitHub 仓库中，以上实现的 api 会被规范化为 <code>/api/v1/*</code>，之后优化过的版本会注册为 <code>/api/v2/</code>，这样做可能较符合实际生产环境的写法……</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.koajs.com.cn/#">Koa 中文网</a></li>
+<li><a target="_blank" rel="noopener" href="https://chenshenhai.github.io/koa2-note/">Koa2 进阶学习笔记</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1022910821149312/1023025933764960">koa - 廖雪峰的官方网站</a></li>
+<li><a target="_blank" rel="noopener" href="https://ruanyifeng.com/blog/2017/08/koa.html">Koa 框架教程 - 阮一峰的网络日志</a></li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/7066568536944017438#heading-8">koa 连接sqlite3 项目目录结构 - 稀土掘金</a></li>
+</ul>
+<h2 id="后话"><a href="#后话" class="headerlink" title="后话"></a>后话</h2><p>每次写CRUD，都会觉得后端这套东西的逻辑性比前端要强😇，写的时候行云流水。</p>
+<p><code>koa</code> 给我的开发初体验不错，主打一个轻便简洁，仅存储少量数据时配合 <code>sqlite</code> 更是方便。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/friends/">友链</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-number">1.</span> <span class="toc-text">准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#koa"><span class="toc-number">1.1.</span> <span class="toc-text">koa</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sqlite"><span class="toc-number">1.2.</span> <span class="toc-text">sqlite</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF%E6%A6%82%E6%8B%AC"><span class="toc-number">3.</span> <span class="toc-text">实战场景概括</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="toc-number">4.</span> <span class="toc-text">初始化项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#init-ping"><span class="toc-number">5.</span> <span class="toc-text">init &amp; ping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#database"><span class="toc-number">6.</span> <span class="toc-text">database</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#schema"><span class="toc-number">7.</span> <span class="toc-text">schema</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#modules"><span class="toc-number">8.</span> <span class="toc-text">modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#controllers"><span class="toc-number">9.</span> <span class="toc-text">controllers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#router-api"><span class="toc-number">10.</span> <span class="toc-text">router&#x2F;api</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bodyparser-cors"><span class="toc-number">11.</span> <span class="toc-text">bodyparser &amp; cors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90"><span class="toc-number">11.1.</span> <span class="toc-text">参数解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%A8%E5%9F%9F"><span class="toc-number">11.2.</span> <span class="toc-text">跨域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#app"><span class="toc-number">12.</span> <span class="toc-text">app</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-number">13.</span> <span class="toc-text">测试工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96"><span class="toc-number">14.</span> <span class="toc-text">优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">15.</span> <span class="toc-text">参考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AF%9D"><span class="toc-number">16.</span> <span class="toc-text">后话</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&text=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&is_video=false&description=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于 Koa2+SQLite 构建 CRUD API&body=Check out this article: https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&title=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&name=基于 Koa2+SQLite 构建 CRUD API&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2023/04/28/202304/koa2-crud-example/&t=基于 Koa2+SQLite 构建 CRUD API"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    ma5hr00m
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8a3de63e395686941d3b2d65a69ac600";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

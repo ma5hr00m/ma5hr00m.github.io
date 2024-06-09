@@ -9,7 +9,7 @@
     <meta name="description" content="阿菇之前遇到过这个问题，顺利地解决了。这里补一篇博客，说说具体的操作步骤。本教程的测试环境为 Ubuntu22.04，理论上适用于大多数 Linux 系统（在正确安装相关工具的前提下）。 引入关于 Node.js，我觉得它官网的描述就是最准确的：  Node.js® is an open-source, cross-platform JavaScript runtime environment.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过 nvm 配置 Node.js 开发环境">
-<meta property="og:url" content="https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/index.html">
+<meta property="og:url" content="https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/index.html">
 <meta property="og:site_name" content="菇物语">
 <meta property="og:description" content="阿菇之前遇到过这个问题，顺利地解决了。这里补一篇博客，说说具体的操作步骤。本教程的测试环境为 Ubuntu22.04，理论上适用于大多数 Linux 系统（在正确安装相关工具的前提下）。 引入关于 Node.js，我觉得它官网的描述就是最准确的：  Node.js® is an open-source, cross-platform JavaScript runtime environment.">
 <meta property="og:locale" content="zh_CN">
@@ -120,17 +120,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&text=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&is_video=false&description=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=通过 nvm 配置 Node.js 开发环境&body=Check out this article: https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&name=通过 nvm 配置 Node.js 开发环境&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&t=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&text=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&is_video=false&description=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通过 nvm 配置 Node.js 开发环境&body=Check out this article: https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&name=通过 nvm 配置 Node.js 开发环境&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&t=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -233,6 +233,12 @@
 </article>
 
 
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
 
         
           <div id="footer-post-container">
@@ -265,17 +271,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&text=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&is_video=false&description=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=通过 nvm 配置 Node.js 开发环境&body=Check out this article: https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&name=通过 nvm 配置 Node.js 开发环境&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2023/06/12/202306/nvm-node/&t=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&text=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&is_video=false&description=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通过 nvm 配置 Node.js 开发环境&body=Check out this article: https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&title=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&name=通过 nvm 配置 Node.js 开发环境&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2023/06/12/202306/nvm-node/&t=通过 nvm 配置 Node.js 开发环境"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -384,6 +390,26 @@
 <!-- Disqus Comments -->
 
 <!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'ma5hr00m/ma5hr00m.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
 
 </body>
 </html>

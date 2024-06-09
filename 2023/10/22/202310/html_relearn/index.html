@@ -9,7 +9,7 @@
     <meta name="description" content="阿菇最近倾向于用原生三件套做 Web 开发，想尽可能少地依赖三方库。 或许没什么必要，因为封装好的东西用起来确实爽快。但造轮子确实也有造轮子的快乐。不可辩解的是，阿菇对前端项目中乱糟糟的配置文件以及 node_modules 感到厌烦，即使在开发过程中用了 File Nesting Updater 这样简化目录结构的插件。 掌握一定 Web 开发基础后再回过头来学习，能发现之前没注意到的有趣知识，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTML 不常用标签及 &lt;head&gt; 优化">
-<meta property="og:url" content="https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/index.html">
+<meta property="og:url" content="https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/index.html">
 <meta property="og:site_name" content="菇物语">
 <meta property="og:description" content="阿菇最近倾向于用原生三件套做 Web 开发，想尽可能少地依赖三方库。 或许没什么必要，因为封装好的东西用起来确实爽快。但造轮子确实也有造轮子的快乐。不可辩解的是，阿菇对前端项目中乱糟糟的配置文件以及 node_modules 感到厌烦，即使在开发过程中用了 File Nesting Updater 这样简化目录结构的插件。 掌握一定 Web 开发基础后再回过头来学习，能发现之前没注意到的有趣知识，">
 <meta property="og:locale" content="zh_CN">
@@ -122,17 +122,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&text=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&is_video=false&description=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=HTML 不常用标签及 &lt;head&gt; 优化&body=Check out this article: https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&name=HTML 不常用标签及 &lt;head&gt; 优化&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&t=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&text=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&is_video=false&description=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTML 不常用标签及 &lt;head&gt; 优化&body=Check out this article: https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&name=HTML 不常用标签及 &lt;head&gt; 优化&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&t=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -308,6 +308,12 @@
 </article>
 
 
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
 
         
           <div id="footer-post-container">
@@ -340,17 +346,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&text=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&is_video=false&description=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=HTML 不常用标签及 &lt;head&gt; 优化&body=Check out this article: https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&name=HTML 不常用标签及 &lt;head&gt; 优化&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2023/10/22/202310/html_relearn/&t=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&text=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&is_video=false&description=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTML 不常用标签及 &lt;head&gt; 优化&body=Check out this article: https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&title=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&name=HTML 不常用标签及 &lt;head&gt; 优化&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2023/10/22/202310/html_relearn/&t=HTML 不常用标签及 &lt;head&gt; 优化"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -459,6 +465,26 @@
 <!-- Disqus Comments -->
 
 <!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'ma5hr00m/ma5hr00m.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
 
 </body>
 </html>

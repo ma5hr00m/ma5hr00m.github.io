@@ -9,7 +9,7 @@
     <meta name="description" content="继续补档，发现这块内容其实蛮多的。后面估计还会有两篇（怎么还有两篇啊喂！），分别是 JavaScript执行原理·补 和 JavaScript部分特性，这周不知道能不能搞定。 先看 JS 原型链吧。 JS 继承机制设计1994年，网景公司（Netscape）发布了 Navigator v0.9，轰动一时。但当时的网页不具备交互功能，数据的交互全部依赖服务器端，这浪费了时间与服务器资源。 网景公司需">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript 原型链详解">
-<meta property="og:url" content="https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/index.html">
+<meta property="og:url" content="https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/index.html">
 <meta property="og:site_name" content="菇物语">
 <meta property="og:description" content="继续补档，发现这块内容其实蛮多的。后面估计还会有两篇（怎么还有两篇啊喂！），分别是 JavaScript执行原理·补 和 JavaScript部分特性，这周不知道能不能搞定。 先看 JS 原型链吧。 JS 继承机制设计1994年，网景公司（Netscape）发布了 Navigator v0.9，轰动一时。但当时的网页不具备交互功能，数据的交互全部依赖服务器端，这浪费了时间与服务器资源。 网景公司需">
 <meta property="og:locale" content="zh_CN">
@@ -122,17 +122,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&text=JavaScript 原型链详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&is_video=false&description=JavaScript 原型链详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=JavaScript 原型链详解&body=Check out this article: https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&name=JavaScript 原型链详解&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&t=JavaScript 原型链详解"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&text=JavaScript 原型链详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&is_video=false&description=JavaScript 原型链详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JavaScript 原型链详解&body=Check out this article: https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&name=JavaScript 原型链详解&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&t=JavaScript 原型链详解"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -276,6 +276,12 @@
 </article>
 
 
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
 
         
           <div id="footer-post-container">
@@ -308,17 +314,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&text=JavaScript 原型链详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&is_video=false&description=JavaScript 原型链详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=JavaScript 原型链详解&body=Check out this article: https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&name=JavaScript 原型链详解&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://notes.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&t=JavaScript 原型链详解"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&text=JavaScript 原型链详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&is_video=false&description=JavaScript 原型链详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JavaScript 原型链详解&body=Check out this article: https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&title=JavaScript 原型链详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&name=JavaScript 原型链详解&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2024/02/14/202402/js-prototype-chain/&t=JavaScript 原型链详解"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -427,6 +433,26 @@
 <!-- Disqus Comments -->
 
 <!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'ma5hr00m/ma5hr00m.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
 
 </body>
 </html>

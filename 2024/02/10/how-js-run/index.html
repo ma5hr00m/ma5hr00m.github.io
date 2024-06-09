@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="最近在复习 JavaScript 反混淆相关内容，正好给执行原理补个档，之前旧版的随旧博客一起遗失了，这里重新写了一篇。 预计之后还会有 JavaScript执行原理·补 和 JavaScript混淆&#x2F;反混淆，慢慢写吧。 :::tip 跳转到 JavaScript混淆&#x2F;反混淆 ::: JavaScriptJavaScript 是一门解释型语言，与 C&#x2F;Golang 等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 执行原理">
+<meta property="og:url" content="https://blog.ma5hr00m.top/2024/02/10/how-js-run/index.html">
+<meta property="og:site_name" content="菇物语">
+<meta property="og:description" content="最近在复习 JavaScript 反混淆相关内容，正好给执行原理补个档，之前旧版的随旧博客一起遗失了，这里重新写了一篇。 预计之后还会有 JavaScript执行原理·补 和 JavaScript混淆&#x2F;反混淆，慢慢写吧。 :::tip 跳转到 JavaScript混淆&#x2F;反混淆 ::: JavaScriptJavaScript 是一门解释型语言，与 C&#x2F;Golang 等">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img.ma5hr00m.top/blog/20240221083858.png">
+<meta property="og:image" content="https://img.ma5hr00m.top/blog/20240221083929.png">
+<meta property="article:published_time" content="2024-02-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-09T12:55:23.359Z">
+<meta property="article:author" content="ma5hr00m">
+<meta property="article:tag" content="ma5hr00m, blog, 阿菇, 技术, 个人博客">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.ma5hr00m.top/blog/20240221083858.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://img.ma5hr00m.top/blog/im-favicon.svg">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="https://img.ma5hr00m.top/blog/im-favicon.svg" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="https://img.ma5hr00m.top/blog/im-favicon.svg">
+        
+      
+    
+    <!-- title -->
+    <title>JavaScript 执行原理</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JYGWHCT9EX"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JYGWHCT9EX');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2024/02/12/js-obfuscation-deobfuscation/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/12/11/dnssec/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2024/02/10/how-js-run/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&text=JavaScript 执行原理"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&is_video=false&description=JavaScript 执行原理"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JavaScript 执行原理&body=Check out this article: https://blog.ma5hr00m.top/2024/02/10/how-js-run/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&name=JavaScript 执行原理&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&t=JavaScript 执行原理"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript"><span class="toc-number">1.</span> <span class="toc-text">JavaScript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JS-Engine-%E5%BC%95%E6%93%8E"><span class="toc-number">2.1.</span> <span class="toc-text">JS Engine 引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS-Runtime-%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="toc-number">2.2.</span> <span class="toc-text">JS Runtime 运行时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parser-%E8%A7%A3%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">Parser 解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lexing-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">Lexing 词法分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parsing-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">3.2.</span> <span class="toc-text">Parsing 语法分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ignition-%E8%A7%A3%E9%87%8A"><span class="toc-number">4.</span> <span class="toc-text">Ignition 解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TurboFan-%E7%BC%96%E8%AF%91"><span class="toc-number">5.</span> <span class="toc-text">TurboFan 编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JIT-%E5%8D%B3%E6%97%B6%E7%BC%96%E8%AF%91"><span class="toc-number">5.1.</span> <span class="toc-text">JIT 即时编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E9%98%85%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">参阅文章</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        JavaScript 执行原理
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">ma5hr00m</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-02-09T16:00:00.000Z" class="dt-published" itemprop="datePublished">2024-02-10</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/JavaScript/">JavaScript</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>最近在复习 JavaScript 反混淆相关内容，正好给执行原理补个档，之前旧版的随旧博客一起遗失了，这里重新写了一篇。</p>
+<p>预计之后还会有 <a href="#">JavaScript执行原理·补</a> 和 <a href="#">JavaScript混淆&#x2F;反混淆</a>，慢慢写吧。</p>
+<p>:::tip</p>
+<p>跳转到 <a target="_blank" rel="noopener" href="https://ma5hr00m.top/archives/2024/02/js-obfuscation-deobfuscation.html">JavaScript混淆&#x2F;反混淆</a></p>
+<p>:::</p>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><p>JavaScript 是一门解释型语言，与 C&#x2F;Golang 等静态编译语言不同。静态编译型语言通过编译器直接将代码转化为机器码，然后运行在机器上；JS 是先经过编译产生字节码，然后在虚拟机上运行字节码（这点与 Java&amp;JVM 很相似），性能虽不及静态编译型语言，但获得了更多的灵活性。</p>
+<h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><h3 id="JS-Engine-引擎"><a href="#JS-Engine-引擎" class="headerlink" title="JS Engine 引擎"></a>JS Engine 引擎</h3><p>为什么需要 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/JavaScript_engine">JS Engine</a>🤔️？</p>
+<p>JS Engine 其实就可以理解为上文中所说的虚拟机。机器底层的 CPU 只能执行指令集中的指令（即对应的汇编代码），无法直接识别高级语言。JS Engine 可以将 JS 代码编译为字节码，然后执行代码，同时还提供了分配内存和垃圾回收的功能，极大程度上减轻了开发人员的工作量，何乐而不为。</p>
+<p>从本质上来讲，JS Engine 就是一段程序，用于实现上述功能。</p>
+<p>互联网中最常见、使用最广泛的 JS Engine 是 <strong>Google V8</strong>。Google V8 是用 C++ 编写的开源高性能 JS Engine（同时也是 WebAssembly Engine），目前已被用于 Chrome 浏览器、Node.js、MongoDB 等多个知名项目。Chrome 占据了全球浏览器市场 60% 的份额，而 Node.js 已然成为服务器端 JS 代码的执行标准，由此可见 V8 使用之广泛。</p>
+<p>除此之外，还有一些常见的 JS Engine：</p>
+<ul>
+<li>由 Mozilla 为 Firefox 开发的 SpiderMonkey</li>
+<li>为 Safari 浏览器提供支持的 JavaScriptCore</li>
+<li>为 IE 提供支持的 Chakra</li>
+</ul>
+<p>本篇接下来的 JS Engine 都默认为 Google V8。</p>
+<h3 id="JS-Runtime-运行时"><a href="#JS-Runtime-运行时" class="headerlink" title="JS Runtime 运行时"></a>JS Runtime 运行时</h3><p>我们可以把 JS Runtime 理解为一栋房子，JS 代码都需要在这栋房子中运行。而这栋房子由很多部分共同组成，包括 JS Engine、外部 API 和回调队列（callback queue）。有时也把 JS 用到的 core lib 核心库看作 Runtime 的一部分。</p>
+<p><img src="https://img.ma5hr00m.top/blog/20240221083858.png" alt="20240221083858"></p>
+<p>以 Chrome 浏览器的 JS Runtime 举例，浏览器的 Runtime 由对应的 JS Engine、Web API 和回调队列组成。JS Engine 在上文中有讲，不再赘述；Web API 是浏览器提供给 Engine 的一系列接口，并不是 JS 的一部分，目的是方便操纵数据和增强浏览器的功能，常用的 Web API 包括 DOM、Web Worker 等；回调队列包括准备好执行的回调函数，回调队列确保回调以先进先出（FIFO）方法执行，并在堆栈为空时将其传递到堆栈中。</p>
+<p>与浏览器 Runtime 不同的是，Node.js 没有 Web API，而是有叫作 C++ 绑定和线程池的其他部分。</p>
+<p>我们可以这样说，Chrome 和 Node.js 中的 JS 代码都依赖于 V8 运行，但它们运行在不同的 Runtime 中。</p>
+<p>在开始之前，我们要知道，V8 是一个非常复杂的项目，有超过 100w 行代码。我们可以根据功能将 V8 Engine 分为不同的子模块，其中最重要的四个子模块分别是：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://v8.dev/blog/scanner">Parser</a>：解析器，将 JS 源码转换为抽象语法树（AST）；</li>
+<li><a target="_blank" rel="noopener" href="https://v8.dev/docs/ignition">Ignition</a>：解释器，将 AST 转换为字节码（Bytecode），然后解释执行 Bytecode，同时收集 TurboFan 优化编译所需的信息，比如函数参数的类型；</li>
+<li><a target="_blank" rel="noopener" href="https://v8.dev/docs/turbofan">TurboFan</a>：编译器，利用 Ignitio 所收集的类型信息，将 Bytecode 转换为优化后的汇编代码；</li>
+<li><a target="_blank" rel="noopener" href="https://v8.dev/blog/trash-talk">Orinoco</a>：垃圾回收模块，负责将程序不再需要的内存空间回收；</li>
+</ul>
+<p>前三个子模块可以代表 JS 运行的主要三个阶段：解析、解释、编译，最后运行。接下来，我会以 V8 Engine 为例，讲讲 JS 代码到底是如何从编写到运行的。</p>
+<h2 id="Parser-解析"><a href="#Parser-解析" class="headerlink" title="Parser 解析"></a>Parser 解析</h2><p>Parser 的功能是将 JS 源码转化为 AST。更确切地说，源码是先经过词法分析转化为 Token，然后 Toekn 经过语法分析转换为 AST。</p>
+<h3 id="Lexing-词法分析"><a href="#Lexing-词法分析" class="headerlink" title="Lexing 词法分析"></a>Lexing 词法分析</h3><p><strong>词法分析</strong> 这个过程会将由字符组成的字符串分解成代码块，这些代码块被称为“词法单元”（Token）。从数据方面来说，这一步是字符流（char stream）转换为标记流（token stream）。</p>
+<p>我们编写一个<code>main.js</code>文件，写入以下内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>以这段代码为例，会被分为<code>const</code>、<code>a</code>、<code>=</code>、<code>3</code>、<code>;</code>词法单元。<code>space</code>是否被当作词法单元，取决于其在当前编程语言中是否有意义，JS 中的空格是无意义，不会被当作词法单元。</p>
+<p>以下为经过词法分析的 JSON 格式的 Tokens：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;const&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Identifier&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;a&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Punctuator&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;=&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Numeric&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Punctuator&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="string">&quot;;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span></span><br></pre></td></tr></table></figure>
+
+<p>分词（Tokenizing）和词法分析（Lexing）的区别在于：词法单元的识别是通过有状态还是无状态的方式进行的，无状态的为分词。这里“状态”的有无则是根据数据的处理过程是否需要考虑其他相关信息决定的。</p>
+<p>在 JS 解析的过程中，我们需要考虑当前词法单元与前面的词法单元之间的关系，因此，JS 的解析是一个有状态的过程，我们就会将字符流转换为 token 的这一过程称为 Lexing 而非 Tokenizing。</p>
+<h3 id="Parsing-语法分析"><a href="#Parsing-语法分析" class="headerlink" title="Parsing 语法分析"></a>Parsing 语法分析</h3><p><strong>语法分析</strong> 是将标记流转换成一个由元素逐级嵌套所组成的代表了程序语法结构的树，我们称其为抽象语法树（AST）。</p>
+<p>上文中的 Tokens 经过语法分析得到的 JSON 格式的 AST 如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Program&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;body&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;VariableDeclaration&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;declarations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;VariableDeclarator&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Identifier&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;a&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;init&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Literal&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;raw&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;const&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;sourceType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;script&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>解析的过程就这么多，最终效果就是得到源码对应的AST。</p>
+<p><a target="_blank" rel="noopener" href="https://esprima.org/demo/parse.html#">Esprima</a> 站点提供了在线解析 JS 代码的功能，输入 JS 代码就可以得到经过 Lexing 的 Tokens 和 经过 Parsing 的 AST，可以动手尝试一下。</p>
+<p>除此之外， <a target="_blank" rel="noopener" href="https://astexplorer.net/">AST explorer</a> 站点也可以在线将 JS 代码转化为 AST。这个网站是基于 acorn.js 实现的，<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/acorn">acorn.js</a>  是一个 JavaScript Parser，你可以通过<code>npm</code>等包管理器下载并使用它。以下是一段使用 acorn.js 将指定代码转化为 AST 的案例。指定解析<code>console.log(1);</code>并以JSON格式输出：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">Parser</span> &#125; = <span class="built_in">require</span>(<span class="string">&#x27;acorn&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> javascriptCode = <span class="string">`</span></span><br><span class="line"><span class="string">  console.log(1);</span></span><br><span class="line"><span class="string">`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ast = <span class="title class_">Parser</span>.<span class="title function_">parse</span>(javascriptCode, &#123; <span class="attr">ecmaVersion</span>: <span class="number">2024</span> &#125;);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(ast));</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ignition-解释"><a href="#Ignition-解释" class="headerlink" title="Ignition 解释"></a>Ignition 解释</h2><p>Ignition 的主要功能是负责将 AST 转换为字节码（Bytecode）并解释执行。</p>
+<p>Bytecode 是一种包含执行程序、由一序列 op 代码&#x2F;数据对组成的二进制文件，是一种中间码（IR），是机器码的一种抽象。它不面向任何机器，只面向当前虚拟机（这里是 V8 引擎）。</p>
+<blockquote>
+<p>我们常说的字节码多是指 Java 字节码，实际上很多动态编译解释的语言都有字节码，比如 Python&#x2F;JavaScript&#x2F;Ruby。</p>
+</blockquote>
+<p>早期的 V8 直接将 AST 编译为机器码，然后在机器中执行，因为这样的效率更高。但机器码会占用过多的系统内存，相比之下，Bytecode 占用的内存空间远比机器码少得多，Google 团队遂选择以时间换空间，转换为现在的 AST-&gt;Bytecode-&gt;机器码。</p>
+<p><img src="https://img.ma5hr00m.top/blog/20240221083929.png" alt="20240221083929"></p>
+<p>Node.js 提供了很多关于 V8 引擎的选项，比如<code>--print-bytecode</code>用于获取源码对应的字节码。</p>
+<p>先编写这样一段 JS 代码并保存为 main.js 文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">ma5hr00m</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">ma5hr00m</span>();</span><br></pre></td></tr></table></figure>
+
+<p>然后使用<code>node --print-bytecode main.js</code>即可得到代码的 Bytecode，会输出非常非常多的内容，可以查找到<code>ma5hr00m()</code>函数对应的 Bytecode：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[generated bytecode <span class="keyword">for</span> <span class="attr">function</span>: ma5hr00m (<span class="number">0x3ae97a693191</span> )]                                                                     </span><br><span class="line"><span class="title class_">Bytecode</span> <span class="attr">length</span>: <span class="number">19</span>                                                                                                                                            </span><br><span class="line"><span class="title class_">Parameter</span> count <span class="number">1</span>                                                                                                                                              </span><br><span class="line"><span class="title class_">Register</span> count <span class="number">3</span>                                                                                                                                               </span><br><span class="line"><span class="title class_">Frame</span> size <span class="number">24</span>                                                                                                                                                  </span><br><span class="line"><span class="title class_">Bytecode</span> <span class="attr">age</span>: <span class="number">0</span>                                                                                                                                                </span><br><span class="line">   <span class="number">24</span> S&gt; <span class="number">0x3ae97a6940ee</span> @    <span class="number">0</span> : <span class="number">21</span> <span class="number">00</span> <span class="number">00</span>          <span class="title class_">LdaGlobal</span> [<span class="number">0</span>], [<span class="number">0</span>]                                                                                          </span><br><span class="line">         <span class="number">0x3ae97a6940f1</span> @    <span class="number">3</span> : c3                <span class="title class_">Star1</span>                                                                                                       </span><br><span class="line">   <span class="number">32</span> E&gt; <span class="number">0x3ae97a6940f2</span> @    <span class="number">4</span> : 2d f9 <span class="number">01</span> <span class="number">02</span>       <span class="title class_">GetNamedProperty</span> r1, [<span class="number">1</span>], [<span class="number">2</span>]                                                                               </span><br><span class="line">         <span class="number">0x3ae97a6940f6</span> @    <span class="number">8</span> : c4                <span class="title class_">Star0</span>                                                                                                       </span><br><span class="line">         <span class="number">0x3ae97a6940f7</span> @    <span class="number">9</span> : 0d <span class="number">01</span>             <span class="title class_">LdaSmi</span> [<span class="number">1</span>]                                                                                                  </span><br><span class="line">         <span class="number">0x3ae97a6940f9</span> @   <span class="number">11</span> : c2                <span class="title class_">Star2</span>                                                                                                       </span><br><span class="line">   <span class="number">32</span> E&gt; <span class="number">0x3ae97a6940fa</span> @   <span class="number">12</span> : 5e fa f9 f8 <span class="number">04</span>    <span class="title class_">CallProperty1</span> r0, r1, r2, [<span class="number">4</span>]                                                                               </span><br><span class="line">         <span class="number">0x3ae97a6940ff</span> @   <span class="number">17</span> : 0e                <span class="title class_">LdaUndefined</span>                                                                                                </span><br><span class="line">   <span class="number">40</span> S&gt; <span class="number">0x3ae97a694100</span> @   <span class="number">18</span> : a9                <span class="title class_">Return</span>                                                                                                      </span><br><span class="line"><span class="title class_">Constant</span> pool (size = <span class="number">2</span>)                                                                                                                                       </span><br><span class="line"><span class="number">0x3ae97a694099</span>: [<span class="title class_">FixedArray</span>] <span class="keyword">in</span> <span class="title class_">OldSpace</span>                                                                                                                       </span><br><span class="line"> - <span class="attr">map</span>: <span class="number">0x2a087bbc0211</span>                                                                                                                  </span><br><span class="line"> - <span class="attr">length</span>: <span class="number">2</span>                                                                                                                                                   </span><br><span class="line">           <span class="number">0</span>: <span class="number">0x2a087bbc5ce9</span>                                                                                                              </span><br><span class="line">           <span class="number">1</span>: <span class="number">0x398ad9accb91</span>                                                                                                                  </span><br><span class="line"><span class="title class_">Handler</span> <span class="title class_">Table</span> (size = <span class="number">0</span>)                                                                                                                                       </span><br><span class="line"><span class="title class_">Source</span> <span class="title class_">Position</span> <span class="title class_">Table</span> (size = <span class="number">10</span>)                                                                                                                              </span><br><span class="line"><span class="number">0x3ae97a694109</span> </span><br></pre></td></tr></table></figure>
+
+<p>我们可以简单分析其中 Bytecode 字段对应的指令：</p>
+<ul>
+<li>从全局加载一个值到寄存器中；</li>
+<li>将寄存器 1 的值存储到一个位置；</li>
+<li>从一个对象中获取属性并存储到寄存器 0；</li>
+<li>……</li>
+</ul>
+<p>这看起来很像我们学习过的汇编语言，或者说 Bytecode 就是抽象后的汇编，它仅面向虚拟机 CPU 而不是其他任何机器的 CPU，这就说明 V8 不需要为不同的 CPU 生成不同的代码，只需生成 Bytecode，这样也在某种程度上简化了 V8 的编译流程，提高了其可拓展性。</p>
+<h2 id="TurboFan-编译"><a href="#TurboFan-编译" class="headerlink" title="TurboFan 编译"></a>TurboFan 编译</h2><p>TurboFan 负责将 Bytecode 转换为优化后的机器码。</p>
+<p>前面说过，Ignition 子模块已经可以完成 AST-&gt;Bytecode 并解释执行，那为什么 V8 还需要 TurboFan 来编译 Bytecode 呢？</p>
+<p>前面说过，JavaScript 是一门解释型的语言。解释型语言的特点是：</p>
+<ul>
+<li>运行时逐行被解释器解释并执行；</li>
+<li>每次运行程序时都需要将源代码翻译成机器代码并执行；</li>
+</ul>
+<p>解释型语言的好处就是灵活且启动速度快，在 Web 应用场景下，这种策略是优于编译型语言的。但随着时代进步，Web 应用越来越庞大，解释型语言执行速度慢的缺点也逐渐凸显出来。在 V8 出现之前，所有 JS Engine 都采用着解释执行的方式。</p>
+<p>而 V8 率先引入了即时编译（JIT）的设计，这种设计混合了解释执行和编译执行两种策略，极大地提升了 JS 的执行速度。之后其它 JS Engine 也是迅速跟进。</p>
+<h3 id="JIT-即时编译"><a href="#JIT-即时编译" class="headerlink" title="JIT 即时编译"></a>JIT 即时编译</h3><p>Just-in-Time 技术是解释执行和编译执行二者之间权衡之后的产物。简单地说，V8 在启动过程中采用解释执行的策略，如果某段代码的超过某个阈值，V8 就会把这段代码编译成执行效率更高的机器码。</p>
+<p>不同 Engine 在实现 JIT 的手段上存在区别，但总体思想是一致的，就是在 Engine 内部添加一个监视器。监视器负责监视代码的运行情况，记录代码一共运行了多少次、代码如何运行等。监视器会根据代码重复次数以及运行某段代码占用的执行时长，对代码进行标记，标记共分为<code>warm</code>、<code>hot</code>和<code>very hot</code>三个等级。</p>
+<p>举个例子说明：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">arraySum</span>(<span class="params">arr</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arr.<span class="property">length</span>; i++) &#123;</span><br><span class="line">        sum += arr[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码刚开始运行时，监视器监视着所有代码的运行情况。</p>
+<p>如果同一行代码重复执行几次，监视器会把这段代码标记为<code>warm</code>。</p>
+<p>被标记为<code>warm</code>的代码段会被 JIT 传递给 <em>基线编译器</em> 进行编译，并将结果储存。<code>warm</code>代码段的每一行都会被编译成一个<code>stub</code>，同时给这个<code>stub</code>分配一个以“行号 + 变量类型”的索引。此时并没有使用编译的代码替换原本的代码。</p>
+<p>如果监视器监视到，某行某个变量使用了同样的变量类型在此多次执行同样的代码，就会将<code>warm</code>升级为<code>hot</code>，并把已编译的代码 push 给浏览器，浏览器接收后就会用编译后的代码替换原本的代码。</p>
+<p>如果<code>hot</code>代码段重复次数非常多以至于占用了大部分执行时间，就标记为<code>very hot</code>。</p>
+<p>被标记为<code>very hot</code>的代码段会被 JIT 传递给 <em>优化编译器</em> 进行编译，生成一个更快速和高效的代码版本，并且存储。例如上面这段代码，<code>sum</code>和<code>arr[i]</code>两个数并不保证都是整数（JS 动态类型），每次<code>+=</code>执行前都需要先判断一遍数据类型，如果这段代码重复执行了非常多次且每次这两个变量都是 INT 型，那这段代码被丢给优化编译器进行编译时，就会被优化为优先进行 INT 类型的判断，以节约时间。</p>
+<p>如果上述经过优化的代码出现问题，某次执行数据判断的结果不是 INT 型，那这段经过优化编译得到的代码就会被直接丢弃，执行过程回到解释器&#x2F;基线解释器，这个过程被称为 <em>去优化</em>。</p>
+<p>要注意，JIT 与虚拟机执行策略的选择有关，而和语言本身无关。除了 JS，其他解释型语言也会引入 JIT 技术，以提高执行效率。</p>
+<h2 id="参阅文章"><a href="#参阅文章" class="headerlink" title="参阅文章"></a>参阅文章</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cheogo.github.io/learn-javascript/201709/runtime.html">JavaScript 语法解析、AST、V8、JIT</a></li>
+<li><a target="_blank" rel="noopener" href="https://kiwenlau.com/2019/07/16/how-does-v8-work/">JavaScript深入浅出第4课：V8引擎是如何工作的</a>，by 寒雁Talk</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25669120">WebAssembly 系列（二）JavaScript Just-in-time (JIT) 工作原理</a>，by 知乎</li>
+<li><a target="_blank" rel="noopener" href="https://juejin.cn/post/6863269040300032008">JS中的JIT与基本执行逻辑</a>，by 稀土掘金</li>
+</ul>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/friends/">友链</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript"><span class="toc-number">1.</span> <span class="toc-text">JavaScript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="toc-number">2.</span> <span class="toc-text">前置知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JS-Engine-%E5%BC%95%E6%93%8E"><span class="toc-number">2.1.</span> <span class="toc-text">JS Engine 引擎</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JS-Runtime-%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="toc-number">2.2.</span> <span class="toc-text">JS Runtime 运行时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parser-%E8%A7%A3%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">Parser 解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lexing-%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">Lexing 词法分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parsing-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">3.2.</span> <span class="toc-text">Parsing 语法分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ignition-%E8%A7%A3%E9%87%8A"><span class="toc-number">4.</span> <span class="toc-text">Ignition 解释</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TurboFan-%E7%BC%96%E8%AF%91"><span class="toc-number">5.</span> <span class="toc-text">TurboFan 编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JIT-%E5%8D%B3%E6%97%B6%E7%BC%96%E8%AF%91"><span class="toc-number">5.1.</span> <span class="toc-text">JIT 即时编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E9%98%85%E6%96%87%E7%AB%A0"><span class="toc-number">6.</span> <span class="toc-text">参阅文章</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2024/02/10/how-js-run/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&text=JavaScript 执行原理"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&is_video=false&description=JavaScript 执行原理"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JavaScript 执行原理&body=Check out this article: https://blog.ma5hr00m.top/2024/02/10/how-js-run/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&title=JavaScript 执行原理"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&name=JavaScript 执行原理&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2024/02/10/how-js-run/&t=JavaScript 执行原理"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    ma5hr00m
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8a3de63e395686941d3b2d65a69ac600";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'ma5hr00m/ma5hr00m.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

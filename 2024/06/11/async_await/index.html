@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="async&#x2F;await 是 JavaScript 用来处理异步操作的语法。它们建立在 Promise 的基础上，提供了一种简洁直观的方式来编写和管理异步代码，现在也已经成为了 JavaScript 实际上的最佳异步编程方案。 Generatorasync 实质上就是早期的 generator 函数的语法糖。 JavaScript 中的生成器（Generator）函数是 ES6 引入（与 Promi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="流畅地使用 async&#x2F;await">
+<meta property="og:url" content="https://blog.ma5hr00m.top/2024/06/11/async_await/index.html">
+<meta property="og:site_name" content="菇物语">
+<meta property="og:description" content="async&#x2F;await 是 JavaScript 用来处理异步操作的语法。它们建立在 Promise 的基础上，提供了一种简洁直观的方式来编写和管理异步代码，现在也已经成为了 JavaScript 实际上的最佳异步编程方案。 Generatorasync 实质上就是早期的 generator 函数的语法糖。 JavaScript 中的生成器（Generator）函数是 ES6 引入（与 Promi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-11T07:01:28.235Z">
+<meta property="article:author" content="ma5hr00m">
+<meta property="article:tag" content="ma5hr00m, blog, 阿菇, 技术, 个人博客">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="https://img.ma5hr00m.top/blog/im-favicon.svg">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="https://img.ma5hr00m.top/blog/im-favicon.svg" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="https://img.ma5hr00m.top/blog/im-favicon.svg">
+        
+      
+    
+    <!-- title -->
+    <title>流畅地使用 async/await</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JYGWHCT9EX"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JYGWHCT9EX');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2024/06/10/browser_eventloop/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2024/06/11/async_await/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&text=流畅地使用 async/await"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&is_video=false&description=流畅地使用 async/await"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=流畅地使用 async/await&body=Check out this article: https://blog.ma5hr00m.top/2024/06/11/async_await/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&name=流畅地使用 async/await&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2024/06/11/async_await/&t=流畅地使用 async/await"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Generator"><span class="toc-number">1.</span> <span class="toc-text">Generator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#co"><span class="toc-number">1.2.</span> <span class="toc-text">co</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94"><span class="toc-number">1.3.</span> <span class="toc-text">对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#async-%E8%AF%AD%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">async 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#await-%E8%AF%AD%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">await 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text">错误处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E8%8C%83"><span class="toc-number">2.4.</span> <span class="toc-text">示范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%EF%BC%9A%E9%A1%BA%E5%BA%8F%E5%AE%8C%E6%88%90%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD"><span class="toc-number">2.5.</span> <span class="toc-text">实例：顺序完成异步加载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B6%E5%B1%82-await"><span class="toc-number">3.</span> <span class="toc-text">顶层 await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E5%9D%91"><span class="toc-number">4.</span> <span class="toc-text">小坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E7%94%A8-await-%E5%92%8C-then"><span class="toc-number">4.1.</span> <span class="toc-text">混用 await 和 .then()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%85%E8%AF%BB%E6%96%87%E6%A1%A3"><span class="toc-number">5.</span> <span class="toc-text">阅读文档</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        流畅地使用 async/await
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">ma5hr00m</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-06-10T16:00:00.000Z" class="dt-published" itemprop="datePublished">2024-06-11</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/JavaScript/">JavaScript</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><code>async/await</code> 是 JavaScript 用来处理异步操作的语法。它们建立在 Promise 的基础上，提供了一种简洁直观的方式来编写和管理异步代码，现在也已经成为了 JavaScript 实际上的最佳异步编程方案。</p>
+<h2 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h2><p><code>async</code> 实质上就是早期的 <code>generator</code> 函数的语法糖。</p>
+<p>JavaScript 中的生成器（Generator）函数是 ES6 引入（与 Promise 一起）的一种特殊类型的函数。生成器这个概念最初来自于其他编程语言，如 Python，把这东西引入到 JavaScript 中，主要是为了简化异步编程和迭代操作。</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p><code>generator</code> 函数的本质是一种可以暂停执行和恢复执行的函数，它返回一个遵循迭代器协议的生成器对象（即 <code>Iterator</code> 对象）。这个对象通过 <code>next()</code> 方法进行迭代，每次调用 <code>next()</code> 都会执行到下一个 <code>yield</code> 表达式，并返回一个包含 <code>value</code> 和 <code>done</code> 属性的对象，其中 <code>value</code> 表示返回的值，<code>done</code> 表示是否完成所有迭代。</p>
+<p><code>yield</code> ****表达式是暂停、恢复执行的关键。在生成器函数体内，使用 <code>yield</code> 表达式来暂停函数的执行，并返回一个值到生成器外部。当外部代码再次调用生成器的 <code>next()</code> 方法时，生成器函数会从上次暂停的地方继续执行。</p>
+<p>语法也比较简单，可以看看以下示范：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">numberGen3erator</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> gen = <span class="title function_">numberGenerator</span>(); <span class="comment">// 调用生成器函数创建生成器对象</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<p>看到这语法结构，你可能会感到熟悉，稍后再说。</p>
+<h3 id="co"><a href="#co" class="headerlink" title="co"></a>co</h3><p>既然介绍 <code>generator</code> 和 <code>async</code> 的关系，那就要说到 <code>co</code>。</p>
+<p><code>co</code> 库是一个用于 Node.js 和浏览器的 JavaScript 库，由 TJ Holowaychuk 开发。它基于 <code>generator</code> 来控制异步流程，允许开发者以一种看起来几乎像同步代码的方式来编写非阻塞的异步代码。<code>co</code> 库的核心功能是自动执行生成器函数，处理 <code>yield</code> 关键字后面跟随的任何 <code>Promise</code> 对象，并在 <code>Promise</code> 解决后继续执行生成器函数。</p>
+<ul>
+<li><strong><code>co</code></strong> 库可以将生成器函数转换为返回 <strong><code>Promise</code></strong> 对象的函数。</li>
+<li>它支持 <strong><code>yield</code></strong> 关键字后面跟随的 <strong><code>Promise</code></strong> 对象、Thunk 函数、数组（并行执行）、对象（并行执行）、生成器和生成器函数（委托）。</li>
+<li><strong><code>co</code></strong> 库的使用前提是生成器函数的 <strong><code>yield</code></strong> 命令后面只能是 Thunk 函数或 <strong><code>Promise</code></strong> 对象。</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">&#x27;co&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">co</span>(<span class="keyword">function</span>* () &#123;</span><br><span class="line">  <span class="keyword">var</span> result = <span class="keyword">yield</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(<span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(value); <span class="comment">// true</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在这个示例中，<code>co</code> 函数接受一个 <code>generator</code> 作为参数，并返回一个 <code>Promise</code> 对象。生成器函数内部通过 <code>yield</code> 暂停执行，等待 <code>Promise</code> 解决，然后 <code>co</code> 库会自动恢复执行。</p>
+<h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><p>有了前面的铺垫，这里做个对比：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// async/await</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;some-url&#x27;</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// generator + co</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">co</span>(<span class="keyword">function</span>* () &#123;</span><br><span class="line">    <span class="keyword">const</span> data = <span class="keyword">yield</span> <span class="title function_">fetch</span>(<span class="string">&#x27;some-url&#x27;</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一目了然，在语法结构层面，你只需要去除 <code>co</code>，然后将 <code>*</code> 替换为 <code>async</code>，<code>yield</code> 替换为 <code>await</code> 即可。既然 <code>async</code> 是对 <code>generator</code> 的封装，那肯定做了一些优化，主要体现在以下四点：</p>
+<ol>
+<li>内置执行器，无需使用额外的 <code>co</code> 库，也不需要手动指定 <code>.next()</code>；</li>
+<li>语义性好，代码更简洁；</li>
+<li>适用性广泛，<code>await</code>命令后面，可以是 Promise 对象和原始类型的值，没有了 <code>yield</code> 的限制；</li>
+<li>返回值为 Promise，可以使用 <code>.then</code> 等语法，更方便。</li>
+</ol>
+<blockquote>
+<p><code>async</code> 函数完全可以看作多个异步操作，包装成的一个 Promise 对象，而 <code>await</code> 命令就是内部 <code>then</code> 命令的语法糖。</p>
+</blockquote>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="async-语法"><a href="#async-语法" class="headerlink" title="async 语法"></a>async 语法</h3><p>使用 <code>async</code> 关键字可以声明一个异步函数（async function），这种函数会返回一个 <code>Promise</code> 对象。如果函数体内有返回值，那么这个值会被 <code>Promise.resolve()</code> 包装。如果函数抛出错误，则会被 <code>Promise.reject()</code> 包装。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;Hello, World!&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">f</span>().<span class="title function_">then</span>(alert); <span class="comment">// &quot;Hello, World!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="await-语法"><a href="#await-语法" class="headerlink" title="await 语法"></a>await 语法</h3><p><code>await</code> 关键字用于等待一个 <code>Promise</code> 完成（fulfilled）或拒绝（rejected）。它只能在异步函数内部使用。当 <code>await</code> 表达式暂停执行异步函数时，它会等待 <code>Promise</code> 解决，然后恢复异步函数的执行并返回解决的值。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">f3</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="title function_">resolve</span>(<span class="string">&quot;完成!&quot;</span>), <span class="number">1000</span>)</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> result = <span class="keyword">await</span> promise; <span class="comment">// 等待直到 promise 解决 (*)</span></span><br><span class="line"></span><br><span class="line">  <span class="title function_">alert</span>(result); <span class="comment">// &quot;完成!&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p><code>async</code> 异步编程错误处理的姿势比较多，比较推荐的是老老实实使用 <code>try...catch...</code>，虽然这可能造成有些情况下难以找到具体错误代码（比如 <code>await</code> 被嵌套在其他操作中）。</p>
+<p>另一种方案是在 <code>await</code> 之后使用 <code>catch()</code> 块捕获错误，也可以，但会造成代码风格上的冲突。</p>
+<p>此外，还有一种有趣的 Golang 代码风格的错误处理方式。我们可以通过创建一个包装函数来模拟这种行为，这个函数接受一个 <strong><code>Promise</code></strong> 并返回一个包含两个值的数组：一个错误和一个结果，这样我们就可以使用数组解构来同时获取错误和结果，而不需要使用 <strong><code>try...catch...</code></strong> 块。这种方法使得错误处理更加显式。</p>
+<p>下面是一个实现这种错误处理的示范：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// &#x27;to&#x27; 函数用于转换 Promise，以便它返回一个包含错误和结果的数组</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">to</span>(<span class="params">promise</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> promise</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> [<span class="literal">null</span>, data])</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> [err]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步函数使用 &#x27;to&#x27; 函数和 &#x27;await&#x27; 来处理 fetch 请求</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchUrl</span>(<span class="params">url</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> [err, response] = <span class="keyword">await</span> <span class="title function_">to</span>(<span class="title function_">fetch</span>(url));</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Fetch error:&#x27;</span>, err);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> [parseErr, data] = <span class="keyword">await</span> <span class="title function_">to</span>(response.<span class="title function_">json</span>());</span><br><span class="line">  <span class="keyword">if</span> (parseErr) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;JSON parsing error:&#x27;</span>, parseErr);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Fetched data:&#x27;</span>, data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="示范"><a href="#示范" class="headerlink" title="示范"></a>示范</h3><p>模拟用户登录流程，流程看注释：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设我们有一个用于请求用户数据的函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getUser</span>(<span class="params">username</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (username === <span class="string">&#x27;Alice&#x27;</span>) &#123;</span><br><span class="line">        <span class="title function_">resolve</span>(&#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">username</span>: <span class="string">&#x27;Alice&#x27;</span>, <span class="attr">verified</span>: <span class="literal">true</span> &#125;);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">reject</span>(<span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;用户不存在&#x27;</span>));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设我们有另一个函数用于验证用户</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">verifyUser</span>(<span class="params">user</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (user.<span class="property">verified</span>) &#123;</span><br><span class="line">        <span class="title function_">resolve</span>(<span class="string">&#x27;用户验证成功&#x27;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">reject</span>(<span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;用户验证失败&#x27;</span>));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 async/await 和 .then().catch() 结合处理登录流程</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loginUser</span>(<span class="params">username</span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 使用 await 等待 getUser 函数解决</span></span><br><span class="line">    <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="title function_">getUser</span>(username);</span><br><span class="line">    <span class="comment">// 使用 await 等待 verifyUser 函数解决</span></span><br><span class="line">    <span class="keyword">const</span> verificationStatus = <span class="keyword">await</span> <span class="title function_">verifyUser</span>(user);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(verificationStatus);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="comment">// 处理任何在 getUser 或 verifyUser 中抛出的错误</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(error.<span class="property">message</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用 loginUser 函数，并使用 .then().catch() 处理最终结果</span></span><br><span class="line"><span class="title function_">loginUser</span>(<span class="string">&#x27;Alice&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;登录流程完成&#x27;</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;登录流程中发生错误:&#x27;</span>, error.<span class="property">message</span>);</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>实际处理异步操作就套用这个 combo。此外还有一些使用时的注意点，这里也做补充：</p>
+<ol>
+<li>多个 <code>await</code> 之间如果不存在继发关系，用 <code>Promise.all()</code> 统一处理，避免额外耗时；</li>
+<li><code>async</code> 函数保留运行栈。</li>
+</ol>
+<p>最后一条特性需要个小例子来解释：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// b() 执行时 a() 同步执行，若 b() or c() 报错，错误堆栈可能不包括 a()</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">a</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="title function_">b</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="title function_">c</span>());</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// b() 执行时 a() 暂停执行，上下文保留，b() or c() 报错，错误堆栈一定包括 a()</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">a</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">b</span>();</span><br><span class="line">  <span class="title function_">c</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实例：顺序完成异步加载"><a href="#实例：顺序完成异步加载" class="headerlink" title="实例：顺序完成异步加载"></a>实例：顺序完成异步加载</h3><p><code>async</code> 内部的多个 <code>await</code> 使继发执行的，如果这些异步操作没有相互依赖，这种特性会降低运行效率，所以我们可以使用以下代码并发发出请求，然后顺序获得结果：</p>
+<blockquote>
+<p>代码案例来自阅读文档1</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">logInOrder</span>(<span class="params">urls</span>) &#123;</span><br><span class="line">  <span class="comment">// 并发读取远程URL</span></span><br><span class="line">  <span class="keyword">const</span> textPromises = urls.<span class="title function_">map</span>(<span class="keyword">async</span> url =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url);</span><br><span class="line">    <span class="keyword">return</span> response.<span class="title function_">text</span>();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 按次序输出</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> textPromise <span class="keyword">of</span> textPromises) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="keyword">await</span> textPromise);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="顶层-await"><a href="#顶层-await" class="headerlink" title="顶层 await"></a>顶层 await</h2><p>除了在 <code>async</code> 代码块中，我们也可以在模块的顶层代码中使用 <strong><code>await</code></strong> 关键字。</p>
+<p>当模块需要在执行任何其他代码之前完成某些异步操作，如数据加载、资源配置等，或者当一个模块依赖于另一个异步解析的模块时，可以使用顶层 <strong><code>await</code></strong> 确保所有依赖都已正确加载。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// config.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadConfig</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;/config.json&#x27;</span>);</span><br><span class="line">  <span class="keyword">if</span> (!response.<span class="property">ok</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;配置加载失败&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> response.<span class="title function_">json</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; loadConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;./config.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> config;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">	<span class="comment">// 使用顶层 await 确保配置在继续之前被加载</span></span><br><span class="line">  config = <span class="keyword">await</span> <span class="title function_">loadConfig</span>();</span><br><span class="line">&#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;无法加载配置:&#x27;</span>, error);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">applyConfig</span>(config);</span><br></pre></td></tr></table></figure>
+
+<p>这种写法有个显而易见的好处——我们不需要在主程序中再额外包裹一层 <code>async</code>，而且虽然操作是异步的，但顶层 <strong><code>await</code></strong> 使得代码的读写更像是同步操作，易于理解和维护。</p>
+<p>同时，这种写法也确保了服务的可靠性。如果开发者单纯写一个脚本，然后在主模块中同步加载这个脚本，则很难控制异步操作的结果，因为主模块没法控制异步操作是否完成，以下面的代码为例，usage.js 无法确保自己获得了一个合理的 output 还是一个 <code>undefined</code>。</p>
+<blockquote>
+<p>代码案例来自阅读文档1</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// awaiting.js</span></span><br><span class="line"><span class="keyword">let</span> output;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> dynamic = <span class="keyword">await</span> <span class="keyword">import</span>(someMission);</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">fetch</span>(url);</span><br><span class="line">  output = <span class="title function_">someProcess</span>(dynamic.<span class="property">default</span>, data);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">main</span>();</span><br><span class="line"><span class="keyword">export</span> &#123; output &#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// usage.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; output &#125; <span class="keyword">from</span> <span class="string">&quot;./awaiting.js&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">outputPlusValue</span>(<span class="params">value</span>) &#123; <span class="keyword">return</span> output + value &#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">outputPlusValue</span>(<span class="number">100</span>));</span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">outputPlusValue</span>(<span class="number">100</span>)), <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>旧版的解决方法是让 awaiting.js 返回一个 Promise 对象，通过这个 Promise 对象判断异步操作是否结束。</p>
+<blockquote>
+<p>代码案例来自阅读文档1</p>
+</blockquote>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// awaiting.js</span></span><br><span class="line"><span class="keyword">let</span> output;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> (<span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">main</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> dynamic = <span class="keyword">await</span> <span class="keyword">import</span>(someMission);</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">fetch</span>(url);</span><br><span class="line">  output = <span class="title function_">someProcess</span>(dynamic.<span class="property">default</span>, data);</span><br><span class="line">&#125;)();</span><br><span class="line"><span class="keyword">export</span> &#123; output &#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// usage.js</span></span><br><span class="line"><span class="keyword">import</span> promise, &#123; output &#125; <span class="keyword">from</span> <span class="string">&quot;./awaiting.js&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">outputPlusValue</span>(<span class="params">value</span>) &#123; <span class="keyword">return</span> output + value &#125;</span><br><span class="line"></span><br><span class="line">promise.<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">outputPlusValue</span>(<span class="number">100</span>));</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">outputPlusValue</span>(<span class="number">100</span>)), <span class="number">1000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这种写法虽然保证了数据的可靠性，但使代码变得臃肿，开发者必需时刻记得在调用这个子模块时要使用 Promise 加载，并且所有依赖这个子模块的模块都需要使用 Promise 加载，一层层地套回去了。而顶层 await 就直接解决了这个问题。</p>
+<h2 id="小坑"><a href="#小坑" class="headerlink" title="小坑"></a>小坑</h2><h3 id="混用-await-和-then"><a href="#混用-await-和-then" class="headerlink" title="混用 await 和 .then()"></a>混用 <code>await</code> 和 <code>.then()</code></h3><p>这是一种不被推荐的做法。</p>
+<p>如果你在一个 <strong><code>async</code></strong> 函数中使用 **<code>await</code>**，然后在同一个 <strong><code>await</code></strong> 调用后面紧接着使用 **<code>.then()</code>**，这可能会让人困惑，因为它混合了两种不同的风格，使代码的意图不够清晰。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&#x27;some-api-url&#x27;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> response.<span class="title function_">json</span>())</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function"><span class="params">error</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error:&#x27;</span>, error));</span><br><span class="line">  <span class="keyword">return</span> data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>业务逻辑明确的话，代码不会给你一拳，但其他开发者会给你一拳。</p>
+<h2 id="阅读文档"><a href="#阅读文档" class="headerlink" title="阅读文档"></a>阅读文档</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://es6.ruanyifeng.com/#docs/async">https://es6.ruanyifeng.com/#docs/async</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/porter/p/13343524.html">https://www.cnblogs.com/porter/p/13343524.html</a></li>
+</ol>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/friends/">友链</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Generator"><span class="toc-number">1.</span> <span class="toc-text">Generator</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#co"><span class="toc-number">1.2.</span> <span class="toc-text">co</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E6%AF%94"><span class="toc-number">1.3.</span> <span class="toc-text">对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#async-%E8%AF%AD%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">async 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#await-%E8%AF%AD%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">await 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-number">2.3.</span> <span class="toc-text">错误处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E8%8C%83"><span class="toc-number">2.4.</span> <span class="toc-text">示范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%EF%BC%9A%E9%A1%BA%E5%BA%8F%E5%AE%8C%E6%88%90%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD"><span class="toc-number">2.5.</span> <span class="toc-text">实例：顺序完成异步加载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B6%E5%B1%82-await"><span class="toc-number">3.</span> <span class="toc-text">顶层 await</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E5%9D%91"><span class="toc-number">4.</span> <span class="toc-text">小坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E7%94%A8-await-%E5%92%8C-then"><span class="toc-number">4.1.</span> <span class="toc-text">混用 await 和 .then()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%85%E8%AF%BB%E6%96%87%E6%A1%A3"><span class="toc-number">5.</span> <span class="toc-text">阅读文档</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://blog.ma5hr00m.top/2024/06/11/async_await/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&text=流畅地使用 async/await"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&is_video=false&description=流畅地使用 async/await"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=流畅地使用 async/await&body=Check out this article: https://blog.ma5hr00m.top/2024/06/11/async_await/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&title=流畅地使用 async/await"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://blog.ma5hr00m.top/2024/06/11/async_await/&name=流畅地使用 async/await&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://blog.ma5hr00m.top/2024/06/11/async_await/&t=流畅地使用 async/await"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    ma5hr00m
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/friends/">友链</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/ma5hr00m">项目</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?8a3de63e395686941d3b2d65a69ac600";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'ma5hr00m/ma5hr00m.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

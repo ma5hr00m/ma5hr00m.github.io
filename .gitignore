@@ -11,4 +11,6 @@ coverage/
 .tmp*
 .vscode
 .idea
+.github
 dist/
+.deploy_git

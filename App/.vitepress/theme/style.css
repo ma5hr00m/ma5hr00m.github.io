@@ -68,6 +68,10 @@
   --vp-c-danger-2: var(--vp-c-red-2);
   --vp-c-danger-3: var(--vp-c-red-3);
   --vp-c-danger-soft: var(--vp-c-red-soft);
+
+  /* Friends*/
+  --vp-c-friend-card: #202127;
+  --vp-c-friend-card-hover: #2a2b30;
 }
 
 /**

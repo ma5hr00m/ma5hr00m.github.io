@@ -1,60 +1,174 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { defineProps, h } from 'vue';
 
-interface Props {
-  size?: 'small' | 'medium'
-  members: DefaultTheme.TeamMember[]
+export interface Friend {
+  name: string;
+  avatar: string;
+  link: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  size: 'medium'
-})
-
-const classes = computed(() => [props.size, `count-${props.members.length}`])
+defineProps<{ friends: Friend[] }>();
 </script>
 
 <template>
-  <div class="VPTeamMembers" :class="classes">
-    <h1>Friends</h1>
+  <div class="friends">
+    <div class="content">
+    <!-- <h1>Friends</h1> -->
+      <div v-for="friend in friends" :key="friend.name"  class="VPFriend-card" :style="{ '--tag-color': friend.color }">
+        <a class="VPFriend-link" :href="friend.link">
+          <div class="VPFriend-image">
+            <img class="VPFriend-avatar" :src="friend.avatar" :alt="friend.name" />
+          </div>
+          <div class="VPFriend-text">
+            <p class="VPFriend-name">{{ friend.name }}</p>
+            <span class="VPFriend-tag">{{ friend.tag }}</span>
+            <p class="VPFriend-descriptionAndHref">
+              <span class="VPFriend-desc">{{ friend.desc }}</span>
+              <span class="VPFriend-href">{{ friend.link.replace(/^https?:\/\//i, '') }}</span>
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.VPTeamMembers.small .container {
-  grid-template-columns: repeat(auto-fit, minmax(224px, 1fr));
+.friends {
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  padding: 32px 32px 0;
+  display: flex;
+  justify-content: center;
 }
 
-.VPTeamMembers.small.count-1 .container {
-  max-width: 276px;
-}
-.VPTeamMembers.small.count-2 .container {
-  max-width: calc(276px * 2 + 24px);
-}
-.VPTeamMembers.small.count-3 .container {
-  max-width: calc(276px * 3 + 24px * 2);
+.content {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
 }
 
-.VPTeamMembers.medium .container {
-  grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
-}
-
-@media (min-width: 375px) {
-  .VPTeamMembers.medium .container {
-    grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+@media screen and (max-width: 1024px) and (min-width: 790px) {
+  .content {
+    grid-template-columns: repeat(3, 1fr); /* 大于680小于1024时，每行3列 */
   }
 }
 
-.VPTeamMembers.medium.count-1 .container {
-  max-width: 368px;
-}
-.VPTeamMembers.medium.count-2 .container {
-  max-width: calc(368px * 2 + 24px);
+@media screen and (max-width: 790px) and (min-width: 560px) {
+  .content {
+    grid-template-columns: repeat(2, 1fr); /* 小于680时，每行2列 */
+  }
 }
 
-.container {
-  display: grid;
-  gap: 24px;
-  margin: 0 auto;
-  max-width: 1152px;
+@media screen and (max-width: 560px) {
+  .content {
+    grid-template-columns: repeat(1, 1fr); /* 小于680时，每行2列 */
+  }
+}
+
+.VPFriend-card {
+  background-color: var(--vp-c-friend-card);
+  width: 15rem;
+  height: 15rem;
+  transition: all .3s;
+  border: 1px solid transparent;
+
+  &:hover {
+    background-color: var(--vp-c-friend-card-hover);
+    border: 1px solid var(--tag-color);
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  .VPFriend-link {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:hover {
+    transform: translateY(-0.5rem);
+  }
+
+  &:hover .VPFriend-text .VPFriend-descriptionAndHref .VPFriend-desc {
+		opacity: 0;
+		-webkit-filter: blur(1.5rem);
+	}
+
+	&:hover .VPFriend-text .VPFriend-descriptionAndHref .VPFriend-href {
+    opacity: 1 !important;
+		-webkit-filter: blur(0) !important;
+    text-decoration: underline;
+	}
+
+  .VPFriend-image {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+
+    .VPFriend-avatar {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .VPFriend-text {
+    margin-top: .75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .VPFriend-name {
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .VPFriend-tag {
+      margin-top: .25rem;
+      font-size: .75rem;
+      padding: 0 1rem;
+      background-color: var(--tag-color);
+      border-radius: 10rem;
+      color: #fff;
+    }
+
+    .VPFriend-descriptionAndHref {
+      position: relative;
+      margin-top: .75rem;
+      color: #fff;
+      font-size: .875rem;
+
+      span {
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+        transition: all .3s;
+			}
+
+      .VPFriend-href {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+				-webkit-filter: blur(1rem);
+        opacity: 0;
+			}
+    }
+  }
 }
 </style>

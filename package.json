@@ -1,0 +1,21 @@
+{
+  "name": "ma5hr00m.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs:dev": "vitepress dev App",
+    "docs:build": "vitepress build App",
+    "docs:preview": "vitepress preview App"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@mdit-vue/shared": "^2.0.0",
+    "sass": "^1.69.5",
+    "vitepress": "1.0.0-rc.32",
+    "vue": "^3.3.12"
+  }
+}
